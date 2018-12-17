@@ -1,6 +1,10 @@
 /* Main styles */
 
 html {
-    background: darkmagenta;
-    color: white;
+    background: whitesmoke;
+    color: #222;
+}
+
+.kuokko-face {
+    width: 20vw;
 }
