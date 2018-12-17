@@ -45,12 +45,11 @@ export function create() {
     recognition.start(); // Starts the speech recognition service listening to incoming audio
 
     return function unsubscribe() {
-      console.log("unsubscribe");
       recognition.abort();
     };
   });
 
-  return rx.pipe(
+  return stream.pipe(
     rxop.retryWhen((errors) => {
       return errors.pipe(
         rxop.flatMap((err) => {

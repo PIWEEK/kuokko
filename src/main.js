@@ -25,10 +25,9 @@ function initialHandler() {
     match() { },
     onEnter() {},
     onLeave() {},
-    handle() {
+    async handle() {
       console.warn('Manifest para móvil');
-      synth.create();
-      synth.speak('¡Los pachachos!');
+      // await synth.speak('¡Los pachachos!');
     }
   }
 }
