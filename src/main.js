@@ -30,26 +30,20 @@ async function main() {
   sr.create().subscribe(onEvent.bind(stm));
 }
 
-
-
 function initialHandler() {
   return {
     match() { },
     onEnter() {},
     onLeave() {},
-    handle() {}
-
+    handle() {
+    }
   }
 }
 
 function searchHandler() {
   return {
     async match(text) {
-<<<<<<< HEAD
-      return text.startsWith("empieza a buscar");
-=======
       return text.startsWith("buscar");
->>>>>>> Minor fixes.
     },
 
     async onEnter() {
