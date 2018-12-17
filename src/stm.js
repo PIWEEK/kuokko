@@ -28,11 +28,12 @@ export class StateMachine {
   }
 
   async transitionToHandler(handler) {
-    await this.currentHandler.onLeave();
+    // TODO: check handler type
+
+    await this.current.onLeave();
     await handler.onEnter();
     await handler.handle(name);
-    this.currentHandler = currentHandler;
-    this.current = handle.name;
+    this.current = handler;
   }
 
   add(name, opts) {
@@ -69,7 +70,7 @@ export class StateMachine {
   }
 
   get handlers() {
-    const availableOptions = this.spec[this.current];
+    const availableOptions = this.spec[this.current.name];
     if (isArray(availableOptions)) {
       return Object.values(pick(this.reg, availableOptions));
     } else {

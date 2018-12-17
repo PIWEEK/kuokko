@@ -9,6 +9,9 @@ export function create() {
     recognition.maxAlternatives = 1; // Max number of recognized alternatives
 
     let count = 0;
+    recognition.onstart = (event) => {
+      console.log("Speech Recognition initialized");
+    };
 
     recognition.onresult = (event) => {
       console.log(event);

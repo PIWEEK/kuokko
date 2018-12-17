@@ -1,5 +1,4 @@
 const browserSync = require("browser-sync");
-
 const rollup = require("rollup");
 const commonjs = require("rollup-plugin-commonjs");
 const nodeResolve = require("rollup-plugin-node-resolve");
@@ -21,7 +20,8 @@ const BUNDLE_INPUT_OPTIONS = {
 
 const BUNDLE_OUTPUT_OPTIONS = {
   file: "out/bundle.js",
-  format: "umd"
+  format: "iife",
+  sourceMap: false,
 };
 
 
@@ -54,11 +54,14 @@ async function watch() {
 
 async function build() {
   try {
-    console.log("Build javascript...");
+    console.log(Object.keys(BUNDLE_INPUT_OPTIONS.cache || {}).length);
+    console.time("Build javascript...");
     const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
     await bundle.write(BUNDLE_OUTPUT_OPTIONS);
-    console.log("done.");
-  } catch (e) {
+    console.timeEnd("Build javascript...");
+
+    BUNDLE_INPUT_OPTIONS.cache = bundle.cache;
+ } catch (e) {
     if (e.frame && e.loc) {
       console.log(`Error (${e.code}): ${e.loc.file}:${e.loc.line}`);
       console.log(e.frame);
