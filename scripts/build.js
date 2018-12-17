@@ -1,29 +1,5 @@
 const browserSync = require("browser-sync");
-const rollup = require("rollup");
-const commonjs = require("rollup-plugin-commonjs");
-const nodeResolve = require("rollup-plugin-node-resolve");
-
-const BUNDLE_INPUT_OPTIONS = {
-  input: "src/main.js",
-  plugins: [
-    nodeResolve({
-      jsnext: true,
-      main: true
-    }),
-
-    commonjs({
-      include: 'node_modules/**',
-      sourceMap: false,
-    })
-  ]
-};
-
-const BUNDLE_OUTPUT_OPTIONS = {
-  file: "out/bundle.js",
-  format: "iife",
-  sourceMap: false,
-};
-
+const browserify = require("browserify");
 
 async function watch() {
   await build();
@@ -46,44 +22,68 @@ async function watch() {
   bs.watch("src/*.js", async function(event, file) {
     if (event !== "change") return;
 
-    await build();
+    try {
+      await build();
+      bs.reload("out/bundle.js");
 
-    bs.reload("out/bundle.js");
+    } catch (e) {
+      console.log(e.stack);
+    }
   });
 }
 
-async function build() {
-  try {
-    console.time("Build javascript...");
-    const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
-    await bundle.write(BUNDLE_OUTPUT_OPTIONS);
-    console.timeEnd("Build javascript...");
+const fs = require("fs");
 
-    BUNDLE_INPUT_OPTIONS.cache = bundle.cache;
- } catch (e) {
-    if (e.frame && e.loc) {
-      console.log(`Error (${e.code}): ${e.loc.file}:${e.loc.line}`);
-      console.log(e.frame);
-    } else {
-      console.log("Unexpected error:", e);
-    }
+async function build() {
+  console.time("Compiling javascript");
+  const babelOptions = {
+    presets: [
+      ["@babel/preset-env", {"targets": "last 2 Chrome versions"}]
+    ]
   }
+
+  return new Promise((resolve, reject) => {
+    const b = browserify({
+      debug: true,
+      insertGlobals: true,
+    });
+
+    b.add("./src/main.js")
+    b.transform("babelify", babelOptions);
+    b.bundle((err, buf) => {
+
+      console.timeEnd("Compiling javascript");
+
+      if (err) {
+        reject(err);
+      } else {
+        fs.writeFileSync("out/bundle.js", buf);
+        resolve();
+      }
+    });
+  });
 }
 
-if (process.argv.length >= 3) {
-  const cmd = process.argv[2];
+(async function() {
+  if (process.argv.length >= 3) {
+    const cmd = process.argv[2];
 
-  switch(cmd) {
-  case "watch": return watch();
-  case "build": return build();
-  default:
-    console.log("Available commands: watch, build");
+    switch(cmd) {
+    case "watch": return watch();
+    case "build": return build();
+    default:
+      console.log("Available commands: watch, build");
+      process.exit(-1);
+    }
+  } else {
+    console.log("Not enough arguments");
     process.exit(-1);
   }
-} else {
-  console.log("Not enough arguments");
-  process.exit(-1);
-}
+})().catch((error) => {
+  console.log(error.stack);
+  process.exit(-2);
+});
+
 
 process.on("unhandledRejection", function(reason) {
   console.log("ERROR:", reason);

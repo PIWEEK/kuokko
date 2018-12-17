@@ -18,18 +18,16 @@
   },
   "homepage": "https://github.com/PIWEEK/kuokko#readme",
   "dependencies": {
-    "fuse.js": "^3.3.0",
-    "fuzzy-search": "^2.1.0",
-    "jssm": "^5.14.0",
-    "limax": "^1.7.0",
-    "lodash-es": "^4.17.11",
-    "natural": "^0.6.2",
-    "rxjs": "^6.3.3"
+    "lodash": "^4.17.11",
+    "rxjs": "^6.3.3",
+    "speakingurl": "^14.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
     "browser-sync": "^2.26.3",
-    "rollup": "^0.68.0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0"
+    "terser": "^3.11.0"
   }
 }

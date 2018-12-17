@@ -1,4 +1,4 @@
-import * as l from "lodash-es";
+import * as l from "lodash";
 // import limax from "limax";
 
 import * as sr from "./speechRecognition";

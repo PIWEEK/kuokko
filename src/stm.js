@@ -1,4 +1,4 @@
-import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "lodash-es";
+import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "lodash";
 
 export default class StateMachine {
   constructor(spec) {
@@ -13,7 +13,7 @@ export default class StateMachine {
     }
 
     await this.current.onEnter();
-    await this.current.handle();
+    await this.current.handle()
   }
 
   async matches(data) {
