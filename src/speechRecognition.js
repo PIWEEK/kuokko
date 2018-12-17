@@ -16,6 +16,7 @@ export function create() {
     };
 
     recognition.onresult = (event) => {
+      console.log(event);
       subscriber.next(event.results[count]);
       count++;
     };

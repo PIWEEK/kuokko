@@ -1,53 +1,55 @@
+import {isUndefined} from "lodash-es";
 import * as sr from "./speechRecognition";
+import {StateMachine} from "./fsm";
 
-sr.create()
-  .subscribe((event) => {
-    console.log(event);
+async function onEvent(event) {
+  const text = event[0].transcript;
+  const handler = await this.matches(text);
+
+  if (handler) {
+    this.transitionToHandler(handler);
+  }
+}
+
+async function main() {
+  const stm = new StateMachine({
+    "": ["search", "info"],
+    "search": ["start", "search"]
   });
 
+  stm.add("", initialHandler);
+  stm.add("search", searchHandler);
 
-// const setup = () => {
-//   const recognition = new webkitSpeechRecognition();
-//   recognition.lang = 'es-ES'; // sets the language of the current SpeechRecognition
-//   recognition.interimResults = false; // Controls if returns non final results
-//   recognition.continuous = true; // Single or continuous results
-//   recognition.maxAlternatives = 1; // Max number of recognized alternatives
+  await stm.start()
 
-//   recognition.onstart = onStart;
-//   recognition.onaudiostart = onAudioStart;
-//   recognition.onresult = handleResult;
-//   recognition.onend = onEnd;
-//   recognition.onerror = handleAudioError;
+  sr.create().subscribe(onEvent.bind(stm));
+}
 
-//   recognition.start(); // Starts the speech recognition service listening to incoming audio
-// }
+function initialHandler() {
+  return {
+    match() { },
+    onEnter() {},
+    onLeave() {},
+    handle() {}
+  }
+}
 
-// /* Fired when the speech recognition service has begun listening to incoming audio */
-// const onStart = () => {
-//   console.log('Speech recognition service has started');
-// }
+function searchHandler() {
+  return {
+    async match(text) {
+      return text.startsWith("empeza buscar");
+    },
 
-// /* Fired when the user agent has started to capture audio. */
-// const onAudioStart = () => {
-//   console.log('Audio capturing started');
-// }
+    async onEnter() {
+    },
 
-// /* Fired when the speech recognition service returns a valid result */
-// const handleResult = (event) => {
-//   console.log(event);
-//   for(let caca of event.results) {
-//     console.log(caca[0].transcript);
-//   }
-// }
+    async handle(text) {
+      console.log("kaka");
+    },
 
-// /* Fired when the speech recognition service has disconnected. */
-// const onEnd = () => {
-//   console.log('Speech recognition service disconnected');
-// }
+    async onLeave() {
+    }
+  };
+}
 
-// /* Fired when a speech recognition error occurs. */
-// const handleAudioError = () => {
-//   console.error(`Speech recognition error detected: ${event.error}`);
-// }
-
-// setup();
+main();
