@@ -1,7 +1,8 @@
-import { Observable } from "rxjs";
+import * as rxop from "rxjs/operators";
+import * as rx from "rxjs";
 
 export function create() {
-  return new Observable((subscriber) => {
+  const stream = new rx.Observable((subscriber) => {
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'es-ES'; // sets the language of the current SpeechRecognition
     recognition.interimResults = false; // Controls if returns non final results
@@ -48,4 +49,19 @@ export function create() {
       recognition.abort();
     };
   });
+
+  return rx.pipe(
+    rxop.retryWhen((errors) => {
+      return errors.pipe(
+        rxop.flatMap((err) => {
+          if (err.error === "no-speech") {
+            return rx.of(1);
+          } else {
+            return rx.throwError(err);
+          }
+        }),
+        rxop.delay(500)
+      );
+    })
+  );
 };

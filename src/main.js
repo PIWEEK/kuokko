@@ -54,7 +54,7 @@ function searchHandler() {
   };
 }
 
-async function main() {
+(async function() {
   const stm = new StateMachine({
     "": ["search"],
     "search": ["search"]
@@ -65,24 +65,5 @@ async function main() {
 
   await stm.start()
 
-  sr.create()
-    .pipe(
-      rxop.retryWhen((errors) => {
-        return errors.pipe(
-          rxop.flatMap((err) => {
-            if (err.error === "no-speech") {
-              return rx.of(1);
-            } else {
-              return rx.throwError(err);
-            }
-          }),
-          rxop.delay(500)
-        );
-      })
-    )
-    .subscribe(onEvent.bind(stm));
-}
-
-
-
-main();
+  sr.create().subscribe(onEvent.bind(stm));
+})();

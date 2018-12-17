@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/PIWEEK/kuokko#readme",
   "dependencies": {
+    "fuse.js": "^3.3.0",
     "jssm": "^5.14.0",
+    "limax": "^1.7.0",
     "lodash-es": "^4.17.11",
     "rxjs": "^6.3.3"
   },
