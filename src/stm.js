@@ -47,13 +47,13 @@ export class StateMachine {
       };
 
       if (isFunction(opts.onEnter)) {
-        result.onEnter.bind(this);
+        result.onEnter = opts.onEnter.bind(this);
       } else {
         result.onEnter = constant(null);
       }
 
       if (isFunction(opts.onLeave)) {
-        result.onLeave.bind(this);
+        result.onLeave = opts.onLeave.bind(this);
       } else {
         result.onLeave = constant(null);
       }

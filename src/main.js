@@ -1,6 +1,6 @@
 import {isUndefined} from "lodash-es";
 import * as sr from "./speechRecognition";
-import {StateMachine} from "./fsm";
+import {StateMachine} from "./stm";
 
 async function onEvent(event) {
   const text = event[0].transcript;
