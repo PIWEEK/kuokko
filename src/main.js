@@ -1,5 +1,5 @@
 import * as l from "lodash";
-// import limax from "limax";
+import slugify from "speakingurl";
 
 import * as sr from "./speechRecognition";
 import * as synth from "./speechSynthesis";
@@ -21,26 +21,33 @@ async function onEvent(event) {
 }
 
 function tokenize(text) {
-  return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/); //.map(limax);
+  return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify)
 }
 
 function matchText(base, incoming) {
-  const incomingTokens = tokenize(incoming)
+  incoming = tokenize(incoming)
 
   let maxIndex = 0;
   let found = 0;
 
   for (let token of base) {
-    const index = incomingTokens.findIndex(o => o === token);
-    if (index >= maxIndex) {
-      found++;
-      maxIndex = index;
+    for (let i=0; i<incoming.length; i++) {
+      const matches = incoming[i].indexOf(token) !== -1;
+      if (matches && i >= maxIndex) {
+        found++;
+        maxIndex = i;
+      }
     }
   }
 
-  console.log("matchText", base, incomingTokens)
-
-  return found === base.length;
+  if (found === base.length) {
+    return {
+      rest: incoming.slice(maxIndex+1),
+      data: incoming
+    };
+  } else {
+    return null;
+  }
 }
 
 function initialHandler() {
@@ -56,19 +63,25 @@ function initialHandler() {
 }
 
 function searchHandler() {
+  const STATE_SYM = Symbol("searchHandler");
+  const tokens = ["busc", "recet"];
+
   return {
     async match(input) {
-      const tokens = ["buscar", "receta"];
-      return matchText(tokens, input);
+      const matches = matchText(tokens, input);
+      this[STATE_SYM] = matches;
+      return !!matches
     },
 
     async onEnter(text) {
-      synth.speak("No tengo recetas");
       console.log("searchHandler:onEnter");
     },
 
     async handle(text) {
-      console.log("searchHandler:handle", text);
+      const state = this[STATE_SYM];
+      synth.speak(`Buscandor recetas para: ${state.rest.join(" ")}`);
+
+      console.log("searchHandler:handle", state);
     },
 
     async onLeave() {
