@@ -1,0 +1,28 @@
+{
+  "name": "kuokko",
+  "version": "1.0.0",
+  "description": "Kuokko is a voice controlled kitchen assistant in your browser. Mamma mia!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PIWEEK/kuokko.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PIWEEK/kuokko/issues"
+  },
+  "homepage": "https://github.com/PIWEEK/kuokko#readme",
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "lodash-es": "^4.17.11",
+    "rollup": "^0.68.0",
+    "rollup-plugin-commonjs": "^9.2.0"
+  },
+  "devDependencies": {
+    "rollup-plugin-node-resolve": "^4.0.0"
+  }
+}
