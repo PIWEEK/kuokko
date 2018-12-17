@@ -26,6 +26,7 @@ function initialHandler() {
     onEnter() {},
     onLeave() {},
     handle() {
+      console.warn('Manifest para móvil');
       synth.create();
       synth.speak('¡Los pachachos!');
     }
