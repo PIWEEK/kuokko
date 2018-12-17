@@ -4,9 +4,8 @@
   "description": "Kuokko is a voice controlled kitchen assistant in your browser. Mamma mia!",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
-    "serve": "node ./scripts/bs.js"
+    "build": "node ./scripts/build.js build",
+    "watch": "node ./scripts/build.js watch"
   },
   "repository": {
     "type": "git",
