@@ -1,3 +1,6 @@
+import * as rxop from "rxjs/operators";
+import * as rx from "rxjs";
+
 import {isUndefined, trim} from "lodash-es";
 import * as sr from "./speechRecognition";
 import {StateMachine} from "./stm";
@@ -6,28 +9,14 @@ async function onEvent(event) {
   const text = trim(event[0].transcript);
   const feedback = document.querySelector('[data-kuokko="feedback"]');
   feedback.innerHTML = text;
-  const handler = await this.matches(text);
-  console.log("new text:", text);
 
   const handler = await this.matches(text);
+  console.log("incoming text:", text);
+
   if (handler) {
-    console.log("handler found:", handler);
-    this.transitionToHandler(handler);
+    console.log("handler found:", handler.name);
+    this.transitionToHandler(handler, text);
   }
-}
-
-async function main() {
-  const stm = new StateMachine({
-    "": ["search"],
-    "search": ["start", "search"]
-  });
-
-  stm.add("", initialHandler);
-  stm.add("search", searchHandler);
-
-  await stm.start()
-
-  sr.create().subscribe(onEvent.bind(stm));
 }
 
 function initialHandler() {
@@ -43,10 +32,13 @@ function initialHandler() {
 function searchHandler() {
   return {
     async match(text) {
-      return text.startsWith("buscar");
+      return (text.startsWith("coco")
+              && text.includes("búscame")
+              && text.includes("receta"));
     },
 
-    async onEnter() {
+    async onEnter(text) {
+      console.log("searchHandler:onEnter");
     },
 
     async handle(text) {
@@ -57,5 +49,36 @@ function searchHandler() {
     }
   };
 }
+
+async function main() {
+  const stm = new StateMachine({
+    "": ["search"],
+    "search": ["search"]
+  });
+
+  stm.add("", initialHandler);
+  stm.add("search", searchHandler);
+
+  await stm.start()
+
+  sr.create()
+    .pipe(
+      rxop.retryWhen((errors) => {
+        return errors.pipe(
+          rxop.flatMap((err) => {
+            if (err.error === "no-speech") {
+              return rx.of(1);
+            } else {
+              return rx.throwError(err);
+            }
+          }),
+          rxop.delay(500)
+        );
+      })
+    )
+    .subscribe(onEvent.bind(stm));
+}
+
+
 
 main();

@@ -54,7 +54,6 @@ async function watch() {
 
 async function build() {
   try {
-    console.log(Object.keys(BUNDLE_INPUT_OPTIONS.cache || {}).length);
     console.time("Build javascript...");
     const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
     await bundle.write(BUNDLE_OUTPUT_OPTIONS);

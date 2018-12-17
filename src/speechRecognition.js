@@ -9,6 +9,28 @@ export function create() {
     recognition.maxAlternatives = 1; // Max number of recognized alternatives
 
     let count = 0;
+
+    // recognition.onaudiostart = (event) => {
+    //   console.log("onaudiostart", event);
+    // };
+
+    // recognition.onaudioend = (event) => {
+    //   console.log("onaudioend", event);
+    // };
+
+    // recognition.onend = (event) => {
+    //   console.log("onend", event);
+    // };
+
+    recognition.onerror = (event) => {
+      console.log("onerror", event);
+      subscriber.error(event);
+    };
+
+    recognition.onnomatch = (event) => {
+      console.log("onnomatch", event);
+    };
+
     recognition.onstart = (event) => {
       console.log("Speech Recognition initialized");
     };
@@ -22,6 +44,7 @@ export function create() {
     recognition.start(); // Starts the speech recognition service listening to incoming audio
 
     return function unsubscribe() {
+      console.log("unsubscribe");
       recognition.abort();
     };
   });

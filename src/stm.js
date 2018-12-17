@@ -27,13 +27,16 @@ export class StateMachine {
     return null;
   }
 
-  async transitionToHandler(handler) {
+  async transitionToHandler(handler, data) {
     // TODO: check handler type
-
-    await this.current.onLeave();
-    await handler.onEnter();
-    await handler.handle(name);
-    this.current = handler;
+    if (this.current.name === handler.name) {
+      await handler.handle(data);
+    } else {
+      await this.current.onLeave(handler);
+      await handler.onEnter(data);
+      await handler.handle(data);
+      this.current = handler;
+    }
   }
 
   add(name, opts) {
