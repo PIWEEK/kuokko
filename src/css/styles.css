@@ -1,10 +1,32 @@
 /* Main styles */
 
 html {
-    background: whitesmoke;
-    color: #222;
+  background: whitesmoke;
+  color: #222;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+main {
+  width: 90;
 }
 
 .kuokko-face {
-    width: 20vw;
+  width: 30vw;
+  animation: kuokko 5s infinite;
+  animation-delay: 2s;
+}
+
+@keyframes kuokko {
+  0%, 100% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
 }

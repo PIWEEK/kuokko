@@ -4,7 +4,11 @@ import {StateMachine} from "./stm";
 
 async function onEvent(event) {
   const text = event[0].transcript;
+  const feedback = document.querySelector('[data-kuokko="feedback"]');
+  feedback.innerHTML = text;
   const handler = await this.matches(text);
+  console.log(text, feedback);
+  console.log(handler);
 
   if (handler) {
     this.transitionToHandler(handler);
@@ -25,6 +29,8 @@ async function main() {
   sr.create().subscribe(onEvent.bind(stm));
 }
 
+
+
 function initialHandler() {
   return {
     match() { },
@@ -37,7 +43,7 @@ function initialHandler() {
 function searchHandler() {
   return {
     async match(text) {
-      return text.startsWith("empeza buscar");
+      return text.startsWith("empieza a buscar");
     },
 
     async onEnter() {
