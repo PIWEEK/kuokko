@@ -1,6 +1,6 @@
 import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "lodash-es";
 
-export class StateMachine {
+export default class StateMachine {
   constructor(spec) {
     this.spec = spec;
 

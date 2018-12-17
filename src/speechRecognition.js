@@ -45,6 +45,7 @@ export function create() {
     recognition.start(); // Starts the speech recognition service listening to incoming audio
 
     return function unsubscribe() {
+      console.log("unsubscribe");
       recognition.abort();
     };
   });
