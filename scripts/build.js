@@ -26,6 +26,8 @@ const BUNDLE_OUTPUT_OPTIONS = {
 
 
 async function watch() {
+  await build();
+
   const bs = browserSync.create();
 
   bs.init({
@@ -44,20 +46,31 @@ async function watch() {
   bs.watch("src/*.js", async function(event, file) {
     if (event !== "change") return;
 
-    const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
-    await bundle.write(BUNDLE_OUTPUT_OPTIONS);
+    await build();
 
     bs.reload("out/bundle.js");
   });
 }
 
 async function build() {
-  const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
-  await bundle.write(BUNDLE_OUTPUT_OPTIONS);
+  try {
+    console.log("Build javascript...");
+    const bundle = await rollup.rollup(BUNDLE_INPUT_OPTIONS);
+    await bundle.write(BUNDLE_OUTPUT_OPTIONS);
+    console.log("done.");
+  } catch (e) {
+    if (e.frame && e.loc) {
+      console.log(`Error (${e.code}): ${e.loc.file}:${e.loc.line}`);
+      console.log(e.frame);
+    } else {
+      console.log("Unexpected error:", e);
+    }
+  }
 }
 
 if (process.argv.length >= 3) {
   const cmd = process.argv[2];
+
   switch(cmd) {
   case "watch": return watch();
   case "build": return build();
@@ -70,3 +83,6 @@ if (process.argv.length >= 3) {
   process.exit(-1);
 }
 
+process.on("unhandledRejection", function(reason) {
+  console.log("ERROR:", reason);
+});
