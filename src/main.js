@@ -3,16 +3,21 @@ import * as rx from "rxjs";
 
 import {isUndefined, trim} from "lodash-es";
 import * as sr from "./speechRecognition";
+import * as synth from "./speechSynthesis";
 import {StateMachine} from "./stm";
 
 async function onEvent(event) {
   const text = trim(event[0].transcript);
   const feedback = document.querySelector('[data-kuokko="feedback"]');
   feedback.innerHTML = text;
+<<<<<<< HEAD
 
   const handler = await this.matches(text);
   console.log("incoming text:", text);
 
+=======
+  const handler = await this.matches(text);
+>>>>>>> Pachachos
   if (handler) {
     console.log("handler found:", handler.name);
     this.transitionToHandler(handler, text);
@@ -25,6 +30,8 @@ function initialHandler() {
     onEnter() {},
     onLeave() {},
     handle() {
+      synth.create();
+      synth.speak('¡Los pachachos!');
     }
   }
 }
