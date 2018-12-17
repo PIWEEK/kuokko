@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "serve": "node ./scripts/bs.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
     "lodash-es": "^4.17.11"
   },
   "devDependencies": {
+    "browser-sync": "^2.26.3",
     "rollup": "^0.68.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0"
