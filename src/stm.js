@@ -3,8 +3,8 @@ import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "l
 export default class StateMachine {
   constructor(spec) {
     this.spec = spec;
-
     this.reg = {};
+    this.state = {};
   }
 
   async start() {
