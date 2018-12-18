@@ -120,6 +120,23 @@ export function searchInfoTimeHandler() {
   };
 }
 
+export function searchInfoDifficultyHandler() {
+  const tokens = [
+    ["muy", "dificil"],
+    ["que", "dificult", "tiene"]
+  ]
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("La receta es de dificultad baja. ¿Quieres saber algo mas?")
+    }
+  };
+}
+
 export function searchInfoGuestsHandler() {
   const tokens = ["cuant", "comensal"];
 

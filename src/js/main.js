@@ -61,12 +61,17 @@ async function onEvent(event) {
 
   stm.add("search/info/time", {
     handler: handlers.searchInfoTimeHandler,
-    choices:  ["search", "search/**", "start"],
+    choices:  ["search/info/no-more","search", "search/**", "start"],
   });
 
   stm.add("search/info/guests", {
     handler: handlers.searchInfoGuestsHandler,
-    choices:  ["search", "search/**", "start"]
+    choices:  ["search/info/no-more", "search", "search/**", "start"]
+  });
+
+  stm.add("search/info/difficulty", {
+    handler: handlers.searchInfoDifficultyHandler,
+    choices: ["search/info/no-more", "search","search/**", "start"]
   });
 
   stm.add("search/info/no-more", {
