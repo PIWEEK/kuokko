@@ -63,6 +63,7 @@ export default class StateMachine {
 
       const result = {
         name: name,
+        hidden: opts.hidden,
         match: opts.match.bind(this),
         handle: opts.handle.bind(this)
       };
@@ -90,8 +91,12 @@ export default class StateMachine {
   }
 
   get handlers() {
-    const options = this.spec[this.current.name];
     const result = [];
+    const options = this.spec[this.current.name];
+
+    if (!isArray(options)) {
+      return result;
+    }
 
     for (let opt of options) {
       for (let name of Object.keys(this.reg)) {
