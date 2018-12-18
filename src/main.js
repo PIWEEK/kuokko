@@ -21,11 +21,11 @@ async function onEvent(event) {
 }
 
 function tokenize(text) {
-  return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify)
+  return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
 }
 
 function matchText(base, incoming) {
-  incoming = tokenize(incoming)
+  incoming = tokenize(incoming);
 
   let maxIndex = 0;
   let found = 0;
@@ -56,21 +56,21 @@ function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
+      synth.speak('Soy kuokko, busca una receta');
       console.warn('Manifest para móvil');
-      // await synth.speak('¡Los pachachos!');
     }
   }
 }
 
 function searchHandler() {
   const STATE_SYM = Symbol("searchHandler");
-  const tokens = ["busc", "recet"];
+  const tokens = ["busc", "recet", "de"];
 
   return {
     async match(input) {
       const matches = matchText(tokens, input);
       this[STATE_SYM] = matches;
-      return !!matches
+      return !!matches;
     },
 
     async onEnter(text) {
@@ -79,7 +79,7 @@ function searchHandler() {
 
     async handle(text) {
       const state = this[STATE_SYM];
-      synth.speak(`Buscandor recetas para: ${state.rest.join(" ")}`);
+      synth.speak(`Ok, un segundo. Buscando recetas de ${state.rest.join(" ")}`);
 
       console.log("searchHandler:handle", state);
     },
@@ -98,7 +98,7 @@ function searchHandler() {
   stm.add("", initialHandler);
   stm.add("search", searchHandler);
 
-  await stm.start()
+  await stm.start();
 
   sr.create().subscribe(onEvent.bind(stm));
 })();

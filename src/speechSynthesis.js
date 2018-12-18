@@ -4,7 +4,7 @@ export function speak(message) {
   return new Promise((resolve, reject) => {
     const msg = new SpeechSynthesisUtterance();
 
-    msg.voice = VOICES[4]; // Note: some voices don't support altering params
+    msg.voice = VOICES[4];
     msg.voiceURI = 'native';
     msg.volume = 1; // 0 to 1
     msg.lang = 'es-ES';
