@@ -1,10 +1,23 @@
 import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "lodash";
 
+import match from "minimatch";
+
 export default class StateMachine {
   constructor(spec) {
-    this.spec = spec;
+    this.spec = this.compile(spec);
     this.reg = {};
     this.state = {};
+    console.log(this.spec);
+  }
+
+  compile(spec) {
+    const result = {};
+
+    for (let key of Object.keys(spec)) {
+      result[key] = spec[key].map(match.makeRe);
+    }
+
+    return result;
   }
 
   async start() {
@@ -29,13 +42,17 @@ export default class StateMachine {
 
   async transitionToHandler(handler, data) {
     // TODO: check handler type
-    if (this.current.name === handler.name) {
+    if (handler.hidden) {
       await handler.handle(data);
     } else {
-      await this.current.onLeave(handler);
-      await handler.onEnter(data);
-      await handler.handle(data);
-      this.current = handler;
+      if (this.current.name === handler.name) {
+        await handler.handle(data);
+      } else {
+        await this.current.onLeave(handler);
+        await handler.onEnter(data);
+        await handler.handle(data);
+        this.current = handler;
+      }
     }
   }
 
@@ -73,12 +90,18 @@ export default class StateMachine {
   }
 
   get handlers() {
-    const availableOptions = this.spec[this.current.name];
-    if (isArray(availableOptions)) {
-      return Object.values(pick(this.reg, availableOptions));
-    } else {
-      return [];
+    const options = this.spec[this.current.name];
+    const result = [];
+
+    for (let opt of options) {
+      for (let name of Object.keys(this.reg)) {
+        if (opt.test(name)) {
+          result.push(this.reg[name]);
+        }
+      }
     }
+
+    return result;
   }
 }
 

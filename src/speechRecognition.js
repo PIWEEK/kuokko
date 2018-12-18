@@ -3,8 +3,8 @@ import * as rx from "rxjs";
 
 let counter = 0;
 
-export function create() {
-  const stream = new rx.Observable((subscriber) => {
+function internalCreate() {
+  return new rx.Observable((subscriber) => {
     const id = counter++;
 
     console.log("speechRecognition:subscribe", id);
@@ -14,7 +14,8 @@ export function create() {
     recognition.continuous = true; // Single or continuous results
     recognition.maxAlternatives = 1; // Max number of recognized alternatives
 
-    let count = 0;
+    let stoped = false;
+    let error = null;
 
     recognition.onaudiostart = (event) => {
       console.log("speechRecognition:onaudiostart", id, event);
@@ -25,15 +26,31 @@ export function create() {
     };
 
     recognition.onend = (event) => {
+      if (stoped) return;
       console.log("speechRecognition:onend", id, event);
-      const error = new Error("End");
-      error.error = "no-speech";
-      // subscriber.error(error);
+      setTimeout(() => {
+        stoped = true;
+        if (error) {
+          subscriber.error(error);
+        } else {
+          error = new Error("End");
+          error.error = "no-speech";
+          subscriber.error(error);
+        }
+      }, 300);
     };
 
     recognition.onerror = (event) => {
+      if (stoped) return;
+      error = event
+
       console.log("speechRecognition:onerror", id, event);
-      subscriber.error(event);
+
+      // setTimeout(() => {
+
+      //   stoped = true;
+      //   subscriber.error(event);
+      // }, 300);
     };
 
     recognition.onnomatch = (event) => {
@@ -41,22 +58,21 @@ export function create() {
     };
 
     recognition.onstart = (event) => {
-      console.log("Speech Recognition initialized");
+      console.log("speechRecognition:onstart", id);
+      // console.log("Speech Recognition initialized");
     };
 
     recognition.onspeechstart = (event) => {
       console.log("speechRecognition:onspeechstart", id);
     };
 
-    recognition.onspeechstop = (event) => {
-      console.log("speechRecognition:onspeechstop", id);
+    recognition.onspeechend = (event) => {
+      console.log("speechRecognition:onspeechend", id);
     };
 
     recognition.onresult = (event) => {
-      console.log("speechRecognition:onresult", id);
-      console.log(event);
-      subscriber.next(event.results[count]);
-      count++;
+      console.log("speechRecognition:onresult", id, event);
+      subscriber.next(event.results[event.resultIndex]);
     };
 
     recognition.start(); // Starts the speech recognition service listening to incoming audio
@@ -67,21 +83,26 @@ export function create() {
       // recognition.abort();
     };
   });
+}
 
-  return stream.pipe(
-    rxop.retry(20),
-    rxop.delay(300)
-    // rxop.retryWhen((errors) => {
-    //   return errors.pipe(
-    //     rxop.flatMap((err) => {
-    //       if (err.error === "no-speech") {
-    //         return rx.of(1);
-    //       } else {
-    //         return rx.throwError(err);
-    //       }
-    //     }),
-    //     rxop.delay(1000)
-    //   );
-    // })
+export function create() {
+  return internalCreate().pipe(
+    // rxop.timeout(15000),
+    rxop.retry(1000000000),
+    rxop.delay(500)
   );
 };
+
+// rxop.retryWhen((errors) => {
+//   return errors.pipe(
+//     rxop.flatMap((err) => {
+//       if (err.error === "no-speech") {
+//         return rx.of(1);
+//       } else {
+//         return rx.throwError(err);
+//       }
+//     }),
+//     rxop.delay(1000)
+//   );
+// })
+

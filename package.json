@@ -19,6 +19,7 @@
   "homepage": "https://github.com/PIWEEK/kuokko#readme",
   "dependencies": {
     "lodash": "^4.17.11",
+    "minimatch": "^3.0.4",
     "rxjs": "^6.3.3",
     "speakingurl": "^14.0.1"
   },

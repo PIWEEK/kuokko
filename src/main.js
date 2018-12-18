@@ -82,29 +82,50 @@ function searchHandler() {
 }
 
 function searchNextResultHandler() {
-  const tokens = ["dim", "otr"];
+  const tokens = ["dime", "otr"];
 
   return {
     async match(input) {
+      // debugger
       return !!matchText(tokens, input);
     },
 
     async handle(text) {
       this.state.searchResultsExposed++;
-      if (this.state.searchResults.length < this.state.searchResultsExposed) {
+      if (this.state.searchResults.length > this.state.searchResultsExposed) {
         const candidate = this.state.searchResults[this.state.searchResultsExposed];
         synth.speak(`La siguiente receta es: ${candidate}. ¿Empezamos?`);
+      } else {
+        synth.speak(`No hay mas recetas!`);
+        this.state.searchResultsExposed--;
       }
     }
   };
 }
+
+function areYouHearMeHandler() {
+  const tokens = ["me", "escuch"];
+
+  return {
+    hidden: true,
+
+    async match(input) {
+      // debugger
+      return !!matchText(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("No, paso de ti");
+    }
+  };
+}
+
 
 function searchInfoHandler() {
   const tokens = ["mas", "info"];
 
   return {
     async match(input) {
-      debugger
       return !!matchText(tokens, input);
     },
 
@@ -112,6 +133,49 @@ function searchInfoHandler() {
       synth.speak("Es una receta de 4 personas, de dificultad baja. " +
                   "El tiempo de elaboracion es de 40 minutos.")
       synth.speak("¿Empezamos?")
+    }
+  };
+}
+
+function searchInfoTimeHandler() {
+  const tokens = ["cuant", "tarda"];
+
+  return {
+    async match(input) {
+      return !!matchText(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("El tiempo de elaboracion es de 40 minutos. ¿Quieres saber algo mas?")
+    }
+  };
+}
+
+function searchInfoGuestsHandler() {
+  const tokens = ["cuant", "comensal"];
+
+  return {
+    async match(input) {
+      return !!matchText(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("Es una receta para 4 personas.");
+    }
+  };
+}
+
+
+function searchInfoNoMoreHandler() {
+  const tokens = ["no"];
+
+  return {
+    async match(input) {
+      return !!matchText(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("Genial, ¿Empezamos?");
     }
   };
 }
@@ -138,8 +202,6 @@ async function onEvent(event) {
     this.steps = [];
   }
 
-
-
   const text = l.trim(event[0].transcript);
 
   console.log(`onEvent => text: '${text}', state: ${this.current.name}, steps: ${this.steps.join("->")}`);
@@ -160,16 +222,28 @@ async function onEvent(event) {
 
 (async function() {
   const stm = new StateMachine({
-    "": ["search"],
-    "search": ["search", "search:info", "search:info:time", "start"],
-    "search:info": ["search:info", "start", "search:next"],
-    "search:next": ["search:info", "search:next", "start"],
+    "": ["search", "hear"],
+    "search": ["search", "search/*", "start"],
+    "search/info": ["search", "search/*", "start"],
+    "search/next": ["search", "search/*", "start"],
+    "search/info/time": ["search", "search/info/*"],
+    // "search/info/dificulty": ["search", "search/info/*"],
+    "search/info/no-more": ["search", "start", "search/next"],
     "start": []
   });
 
   stm.add("", initialHandler);
+  stm.add("hear", areYouHearMeHandler);
+
   stm.add("search", searchHandler);
-  stm.add("search:info", searchInfoHandler);
+  stm.add("search/next", searchNextResultHandler);
+
+  stm.add("search/info", searchInfoHandler);
+  stm.add("search/info/time", searchInfoTimeHandler);
+  stm.add("search/info/dificulty", searchInfoTimeHandler);
+  stm.add("search/info/guests", searchInfoGuestsHandler);
+  stm.add("search/info/no-more", searchInfoNoMoreHandler);
+
   stm.add("start", startHandler);
 
   await stm.start();
