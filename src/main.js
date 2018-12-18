@@ -6,6 +6,12 @@ import * as synth from "./speechSynthesis";
 
 import StateMachine from "./stm";
 
+// Test the 'speak' UI button
+const button = document.getElementById('speak-btn');
+button.addEventListener('click', (event) => {
+  synth.speak('Hey, Fermati!');
+});
+
 function tokenize(text) {
   return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
 }
@@ -43,7 +49,6 @@ function initialHandler() {
     onLeave() {},
     async handle() {
       synth.speak('Benvenutti! Soy kuokko, busca una receta');
-      console.warn('Manifest para móvil');
     }
   }
 }
