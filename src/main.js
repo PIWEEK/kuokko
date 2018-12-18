@@ -253,6 +253,7 @@ async function onEvent(event) {
     handler: doYouHearMeHandler
   });
 
+<<<<<<< HEAD
   stm.add("search", {
     handler: searchHandler,
     choices: ["search", "search/**", "start"]
@@ -267,6 +268,10 @@ async function onEvent(event) {
     handler:searchInfoHandler,
     choices: ["search", "search/**", "start"]
   });
+=======
+  stm.add("", initialHandler);
+  stm.add("hear", doYouHearMeHandler);
+>>>>>>> UI
 
   stm.add("search/info/time", {
     handler: searchInfoTimeHandler,

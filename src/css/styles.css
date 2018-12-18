@@ -1,8 +1,28 @@
 /* Main styles */
 
+:root {
+  --kuokko: #3a3f47;
+  --white: #ffffff;
+  --gray: #7a8395;
+  --graylight: #f2f3f4;
+
+  --large: 2rem;
+  --medium: 1rem;
+  --small: 0.9rem;
+
+  --bold: 800;
+  --medium: 400;
+  --light: 200;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 html {
-  background: whitesmoke;
-  color: #222;
+  background: var(--white);
+  color: var(--kuokko);
+  font-family: 'Nunito', sans-serif;
 }
 
 body {
@@ -12,21 +32,35 @@ body {
   height: 100vh;
 }
 
-main {
-  width: 90;
+.container {
+  max-width: 400px;
+  text-align: center;
+  width: 95%;
+}
+
+.title {
+  font-weight: var(--medium);
+  font-size: var(--large);
+}
+
+.feedback {
+  color: var(--gray);
+  font-size: var(--small);
 }
 
 .kuokko-face {
-  width: 30vw;
-  animation: kuokko 5s infinite;
-  animation-delay: 2s;
+  margin: 4rem auto;
+  width: 150px;
+  height: 150px;
+  background: var(--white);
+  border-radius: 50%;
+  padding: 2rem;
+  border: 1px solid var(--graylight);
+  box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 80%),
+      0 0 0 2rem var(--graylight);
 }
 
-@keyframes kuokko {
-  0%, 100% {
-    transform: rotate(0);
-  }
-  50% {
-    transform: rotate(3deg);
-  }
+.kuokko-logo {
+  width: 100%;
 }
