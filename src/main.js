@@ -6,12 +6,6 @@ import * as synth from "./speechSynthesis";
 
 import StateMachine from "./stm";
 
-// Test the 'speak' UI button
-const button = document.getElementById('speak-btn');
-button.addEventListener('click', (event) => {
-  synth.speak('Hey, Fermati!');
-});
-
 function tokenize(text) {
   return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
 }
@@ -223,12 +217,7 @@ async function onEvent(event) {
 
   console.log(`onEvent => text: '${text}', state: ${this.current.name}, steps: ${this.steps.join("->")}`);
 
-
-  const feedback = document.querySelector('[data-kuokko="feedback"]');
-  feedback.innerHTML = text;
-
   const handler = await this.matches(text);
-
 
   if (handler) {
     console.log("handler found:", handler.name);
