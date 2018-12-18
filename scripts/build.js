@@ -19,7 +19,7 @@ async function watch() {
     }
   });
 
-  bs.watch("src/*.js", async function(event, file) {
+  bs.watch("src/js/**.js", async function(event, file) {
     if (event !== "change") return;
 
     try {
@@ -48,7 +48,7 @@ async function build() {
       insertGlobals: true,
     });
 
-    b.add("./src/main.js")
+    b.add("./src/js/main.js")
     b.transform("babelify", babelOptions);
     b.bundle((err, buf) => {
 
