@@ -1,11 +1,9 @@
-import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "lodash";
-
+import {constant, isFunction, isUndefined, isArray} from "lodash";
 import match from "minimatch";
 
 export default class StateMachine {
   constructor() {
     this.reg = {};
-    this.regCache = {};
     this.state = {};
   }
 
@@ -126,14 +124,6 @@ export default class StateMachine {
   get handlers() {
     const name = this.current.name;
     return this.getHandlersForState(name);
-
-    // if (this.regCache[name]) {
-    //   return this.regCache[name];
-    // } else {
-    //   const result = this.getHandlersForState(this.current.name);
-    //   this.regCache[name] = result;
-    //   return result;
-    // }
   }
 }
 
