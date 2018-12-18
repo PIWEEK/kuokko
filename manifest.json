@@ -1,0 +1,39 @@
+{
+    "name": "Kuokko, asistente de vox para cocina",
+    "short_name": "Kuokko",
+    "start_url": "index.html?launcher=true",
+    "display": "standalone",
+    "theme_color": "#2196F3",
+    "background_color": "#2196F3",
+    "chrome_ui_overrides": {
+      "bookmarks_ui": {
+        "remove_bookmark_shortcut": true,
+        "remove_button": true
+      }
+    },
+    "icons": [{
+      "src": "src/images/kuokko.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }, {
+      "src": "src/images/kuokko.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    }, {
+      "src": "src/images/kuokko.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }, {
+      "src": "src/images/kuokko.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }, {
+      "src": "src/images/kuokko.png",
+      "sizes": "168x168",
+      "type": "image/png"
+    }, {
+      "src": "src/images/kuokko.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }]
+  }

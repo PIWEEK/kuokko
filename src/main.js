@@ -56,7 +56,7 @@ function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
-      synth.speak('Soy kuokko, busca una receta');
+      synth.speak('Benvenutti! Soy kuokko, busca una receta');
       console.warn('Manifest para móvil');
     }
   }
