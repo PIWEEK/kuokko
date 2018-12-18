@@ -61,6 +61,26 @@ body {
       0 0 0 2rem var(--graylight);
 }
 
+.kuokko-face.speaking {
+  box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 80%),
+      0 0 0 2rem var(--graylight);
+  animation: kuokkoShadow 0.5s infinite alternate;
+}
+
+@keyframes kuokkoShadow {
+  from {
+    box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 80%),
+      0 0 0 2rem var(--graylight);
+  }
+  to {
+    box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 70%),
+      0 0 0 2.75rem var(--graylight);
+  }
+}
+
 .kuokko-logo {
   width: 100%;
 }

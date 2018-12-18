@@ -18,7 +18,10 @@ export function initialHandler() {
 }
 
 export function searchHandler() {
-  const tokens = ["busc", "recet", "de"];
+  const tokens = [
+    ["busc", "recet", "de"],
+    ["tien", "recet", "de"],
+  ];
 
   return {
     async match(input) {
@@ -168,7 +171,10 @@ export function searchInfoNoMoreHandler() {
 
 
 export function startHandler() {
-  const tokens = ["si"];
+  const tokens = [
+    ["si"],
+    ["empezamos"],
+  ];
 
   return {
     async match(input) {

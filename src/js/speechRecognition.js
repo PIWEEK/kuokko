@@ -11,11 +11,13 @@ function internalCreate() {
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'es-ES'; // sets the language of the current SpeechRecognition
     recognition.interimResults = false; // Controls if returns non final results
-    recognition.continuous = true; // Single or continuous results
+    recognition.continuous = false; // Single or continuous results
     recognition.maxAlternatives = 1; // Max number of recognized alternatives
 
     let stoped = false;
     let error = null;
+
+    const uiFeedback = document.querySelector('[data-speech="speech-feedback"]');
 
     recognition.onaudiostart = (event) => {
       console.log("speechRecognition:onaudiostart", id, event);
@@ -43,7 +45,7 @@ function internalCreate() {
     recognition.onerror = (event) => {
       if (stoped) return;
       error = event
-
+      uiFeedback.classList.remove("speaking");
       console.log("speechRecognition:onerror", id, event);
 
       // setTimeout(() => {
@@ -64,10 +66,12 @@ function internalCreate() {
 
     recognition.onspeechstart = (event) => {
       console.log("speechRecognition:onspeechstart", id);
+      uiFeedback.classList.add("speaking");
     };
 
     recognition.onspeechend = (event) => {
       console.log("speechRecognition:onspeechend", id);
+      uiFeedback.classList.remove("speaking");
     };
 
     recognition.onresult = (event) => {
