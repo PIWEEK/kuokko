@@ -16,7 +16,7 @@ function tokenize(text) {
   return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
 }
 
-function matchText(base, incoming) {
+function matchTokens(base, incoming) {
   incoming = tokenize(incoming);
 
   let maxIndex = 0;
@@ -42,6 +42,20 @@ function matchText(base, incoming) {
   }
 }
 
+function matchTokensList(tokensList, incoming) {
+  if (l.isString(tokensList[0])) {
+    tokensList = [tokensList]
+  };
+
+  let matches = false;
+  for (let item of tokensList) {
+    matches = matchTokens(item, incoming);
+    if (matches) return matches;
+  }
+
+  return matches;
+}
+
 function initialHandler() {
   return {
     match() { },
@@ -59,7 +73,7 @@ function searchHandler() {
 
   return {
     async match(input) {
-      const matches = matchText(tokens, input);
+      const matches = matchTokensList(tokens, input);
       this.state.search = {matches};
       return !!matches;
     },
@@ -83,12 +97,16 @@ function searchHandler() {
 }
 
 function searchNextResultHandler() {
-  const tokens = ["dime", "otr"];
+  const tokens = [
+    ["dime", "otr"],
+    ["dame", "otr"],
+    ["siguiente"]
+  ];
 
   return {
     async match(input) {
       // debugger
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -104,7 +122,7 @@ function searchNextResultHandler() {
   };
 }
 
-function areYouHearMeHandler() {
+function doYouHearMeHandler() {
   const tokens = ["me", "escuch"];
 
   return {
@@ -112,7 +130,7 @@ function areYouHearMeHandler() {
 
     async match(input) {
       // debugger
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -127,7 +145,7 @@ function searchInfoHandler() {
 
   return {
     async match(input) {
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -143,7 +161,7 @@ function searchInfoTimeHandler() {
 
   return {
     async match(input) {
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -157,7 +175,7 @@ function searchInfoGuestsHandler() {
 
   return {
     async match(input) {
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -172,7 +190,7 @@ function searchInfoNoMoreHandler() {
 
   return {
     async match(input) {
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -187,7 +205,7 @@ function startHandler() {
 
   return {
     async match(input) {
-      return !!matchText(tokens, input);
+      return !!matchTokensList(tokens, input);
     },
 
     async handle(text) {
@@ -222,30 +240,53 @@ async function onEvent(event) {
 }
 
 (async function() {
-  const stm = new StateMachine({
-    "": ["search", "hear"],
-    "search": ["search", "search/*", "start"],
-    "search/info": ["search", "search/*", "start"],
-    "search/next": ["search", "search/*", "start"],
-    "search/info/time": ["search", "search/info/*"],
-    // "search/info/dificulty": ["search", "search/info/*"],
-    "search/info/no-more": ["search", "start", "search/next"],
-    "start": []
+  const stm = new StateMachine();
+
+  stm.add("", {
+    handler: initialHandler,
+    choices: ["search"]
   });
 
-  stm.add("", initialHandler);
-  stm.add("hear", areYouHearMeHandler);
+  stm.add("hear", {
+    global: true,
+    hidden: true,
+    handler: doYouHearMeHandler
+  });
 
-  stm.add("search", searchHandler);
-  stm.add("search/next", searchNextResultHandler);
+  stm.add("search", {
+    handler: searchHandler,
+    choices: ["search", "search/**", "start"]
+  });
 
-  stm.add("search/info", searchInfoHandler);
-  stm.add("search/info/time", searchInfoTimeHandler);
-  stm.add("search/info/dificulty", searchInfoTimeHandler);
-  stm.add("search/info/guests", searchInfoGuestsHandler);
-  stm.add("search/info/no-more", searchInfoNoMoreHandler);
+  stm.add("search/next", {
+    handler: searchNextResultHandler,
+    choices: ["search", "search/*", "start"]
+  });
 
-  stm.add("start", startHandler);
+  stm.add("search/info", {
+    handler:searchInfoHandler,
+    choices: ["search", "search/**", "start"]
+  });
+
+  stm.add("search/info/time", {
+    handler: searchInfoTimeHandler,
+    choices:  ["search", "search/**", "start"],
+  });
+
+  stm.add("search/info/guests", {
+    handler: searchInfoGuestsHandler,
+    choices:  ["search", "search/**", "start"]
+  });
+
+  stm.add("search/info/no-more", {
+    handler: searchInfoNoMoreHandler,
+    choices: ["search", "start", "search/next"]
+  });
+
+  stm.add("start", {
+    handler: startHandler,
+    choices: []
+  });
 
   await stm.start();
 

@@ -3,21 +3,10 @@ import {constant, isFunction, isUndefined, isPlainObject, isArray, pick} from "l
 import match from "minimatch";
 
 export default class StateMachine {
-  constructor(spec) {
-    this.spec = this.compile(spec);
+  constructor() {
     this.reg = {};
+    this.regCache = {};
     this.state = {};
-    console.log(this.spec);
-  }
-
-  compile(spec) {
-    const result = {};
-
-    for (let key of Object.keys(spec)) {
-      result[key] = spec[key].map(match.makeRe);
-    }
-
-    return result;
   }
 
   async start() {
@@ -30,6 +19,7 @@ export default class StateMachine {
   }
 
   async matches(data) {
+    console.log("matches:", this.handlers.map(o => o.name));
     for (let handler of this.handlers) {
       const matches = await handler.match(data);
       if (matches) {
@@ -56,49 +46,67 @@ export default class StateMachine {
     }
   }
 
-  add(name, opts) {
-    if (isFunction(opts)) {
-      this.add(name, opts());
-    } else if (isPlainObject(opts)) {
+  compile(spec) {
+    const result = {};
 
-      const result = {
-        name: name,
-        hidden: opts.hidden,
-        match: opts.match.bind(this),
-        handle: opts.handle.bind(this)
-      };
+    for (let key of Object.keys(spec)) {
+      result[key] = spec[key].map(match.makeRe);
 
-      if (isFunction(opts.onEnter)) {
-        result.onEnter = opts.onEnter.bind(this);
-      } else {
-        result.onEnter = constant(null);
-      }
+    }
 
-      if (isFunction(opts.onLeave)) {
-        result.onLeave = opts.onLeave.bind(this);
-      } else {
-        result.onLeave = constant(null);
-      }
+    return result;
+  }
 
-      this.reg[name] = result;
+  add(name, {handler, choices, global=false, hidden=false}) {
+    handler = isFunction(handler) ? handler() : handler;
 
-      if (name === "") {
-        this.current = result;
-      }
+    const _handler = {
+      name: name,
+      hidden: hidden,
+      global: global,
+
+      match: handler.match.bind(this),
+      handle: handler.handle.bind(this)
+    }
+
+    if (isArray(choices)) {
+      _handler.choices = choices.map(match.makeRe);
+    }
+
+    if (isFunction(handler.onEnter)) {
+      _handler.onEnter = handler.onEnter.bind(this);
     } else {
-      throw new Error("invalid opts");
+      _handler.onEnter = constant(null);
+    }
+
+    if (isFunction(handler.onLeave)) {
+      _handler.onLeave = handler.onLeave.bind(this);
+    } else {
+      _handler.onLeave = constant(null);
+    }
+
+    this.reg[name] = _handler;
+
+    if (name === "") {
+      this.current = _handler;
     }
   }
 
-  get handlers() {
+  getHandlersForState(name) {
     const result = [];
-    const options = this.spec[this.current.name];
+    const handler = this.reg[name];
 
-    if (!isArray(options)) {
+    if (isUndefined(handler)) {
       return result;
     }
 
-    for (let opt of options) {
+    const choices = handler.choices;
+
+    if (!isArray(choices)) {
+      return result;
+    }
+
+    for (let opt of choices) {
       for (let name of Object.keys(this.reg)) {
         if (opt.test(name)) {
           result.push(this.reg[name]);
@@ -106,7 +114,26 @@ export default class StateMachine {
       }
     }
 
+    for (let item of Object.values(this.reg)) {
+      if (item.global) {
+        result.push(item);
+      }
+    }
+
     return result;
+  }
+
+  get handlers() {
+    const name = this.current.name;
+    return this.getHandlersForState(name);
+
+    // if (this.regCache[name]) {
+    //   return this.regCache[name];
+    // } else {
+    //   const result = this.getHandlersForState(this.current.name);
+    //   this.regCache[name] = result;
+    //   return result;
+    // }
   }
 }
 
