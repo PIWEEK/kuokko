@@ -110,7 +110,10 @@ export function searchInfoHandler() {
 }
 
 export function searchInfoTimeHandler() {
-  const tokens = ["cuant", "tarda"];
+  const tokens = [
+    ["cuant", "tarda"]
+    ["cuant", "tiemp"]
+  ];
 
   return {
     async match(input) {
@@ -141,7 +144,10 @@ export function searchInfoDifficultyHandler() {
 }
 
 export function searchInfoGuestsHandler() {
-  const tokens = ["cuant", "comensal"];
+  const tokens = [
+    ["cuant", "comensal"],
+    ["cuant", "pers"]
+  ];
 
   return {
     async match(input) {
