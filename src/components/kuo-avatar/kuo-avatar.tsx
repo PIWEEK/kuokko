@@ -1,6 +1,4 @@
 import { Component } from '@stencil/core';
-// import * as rxOp from 'rxjs/operators';
-// import bus from '../../js/events';
 
 @Component({
   tag: 'kuo-avatar',
@@ -8,17 +6,7 @@ import { Component } from '@stencil/core';
   shadow: true
 })
 
-export class MyComponent {
-
-  // private componentWillLoad() {
-  //   bus.pipe(
-  //     rxOp.filter((message) => {
-  //       return message.type = "search";
-  //     })
-  //   ).subscribe((event) => {
-  //     // this.recipes = event.payload;
-  //   });
-  // }
+export class KuoAvatar {
   
   render() {
     return (

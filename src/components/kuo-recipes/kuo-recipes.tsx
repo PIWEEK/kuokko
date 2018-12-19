@@ -9,23 +9,23 @@ import {
   shadow: true
 })
 
-export class MyComponent {
+export class KuoRecipes {
 
   @Prop() recipes: any;
 
-  private renderReceipt(receipt, index) {
+  private renderRecipes(recipe, index) {
     if (index === 0) {
       return (
         <div>
-          <h1>{receipt.title}</h1>
-          <p>{receipt.cookTime}</p>
+          <h1>{recipe.title}</h1>
+          <p>{recipe.cookTime}</p>
         </div>
       )
     } else {
       return (
         <div>
-          <h2>{receipt.title}</h2>
-          <p>{receipt.cookTime}</p>
+          <h2>{recipe.title}</h2>
+          <p>{recipe.cookTime}</p>
         </div>
       )
     }
@@ -34,9 +34,9 @@ export class MyComponent {
   render() {
     return (
       <div>
-        {this.recipes.map((receipt, index) =>
+        {this.recipes.map((recipe, index) =>
           <div>
-            { this.renderReceipt(receipt, index) }
+            { this.renderRecipes(recipe, index) }
           </div>
         )}
       </div>

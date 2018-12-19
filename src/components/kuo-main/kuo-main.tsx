@@ -1,6 +1,5 @@
 import { Component, Method } from '@stencil/core';
-import * as rxOp from 'rxjs/operators';
-import bus from '../../js/events';
+import { subscribe } from '../../js/events';
 
 @Component({
   tag: 'kuo-main',
@@ -8,26 +7,25 @@ import bus from '../../js/events';
   shadow: true
 })
 
-export class MyComponent {
+export class KuoMain {
 
-  private recipes = {};
+  recipes = {};
   
   componentWillLoad() {
     console.log('componentWillLoad');
-    bus.pipe(
-      rxOp.filter((message: any) => {
-        return message.type === "search";
-      })
-    ).subscribe((event) => {
+    subscribe('search', (event) => {
       console.log('main', event);
-      this.recipes = event.payload;
+      // this.recipes = event.payload;
     });
   }
 
   @Method()
   async renderRecipes(recipes) {
     if (recipes) {
-      return <kuo-recipes recipes="this.recipes"></kuo-recipes>;
+      return (
+        <kuo-recipes>
+        </kuo-recipes>
+      ) 
     }
   }
 
