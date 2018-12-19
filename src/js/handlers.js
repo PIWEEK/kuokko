@@ -58,7 +58,7 @@ export function searchHandler() {
 
         } else {
           if (this.state.searchResultsFound < 6) {
-            synth.speak(`Tengo ${length} recetas de ${term}. `
+            synth.speak(`Tengo ${this.state.searchResultsFound} recetas de ${term}. `
                         + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
           } else {
             synth.speak(`Tengo muchas recetas de ${term}. `
