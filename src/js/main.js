@@ -44,6 +44,12 @@ async function onEvent(event) {
     handler: handlers.doYouHearMeHandler
   });
 
+  stm.add("howareyou", {
+    global: true,
+    hidden: true,
+    handler: handlers.howAreYouHandler
+  });
+
   stm.add("search", {
     handler: handlers.searchHandler,
     choices: ["search", "search/**", "start"]
@@ -85,6 +91,5 @@ async function onEvent(event) {
   });
 
   await stm.start();
-
   sr.create().subscribe(onEvent.bind(stm));
 })();

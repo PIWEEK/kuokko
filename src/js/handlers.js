@@ -2,6 +2,7 @@ import * as l from "lodash";
 import slugify from "speakingurl";
 
 import * as synth from "./speechSynthesis";
+import * as api from "./api";
 
 // --- Handlers
 
@@ -34,16 +35,32 @@ export function searchHandler() {
       const {matches} = this.state.search;
       synth.speak(`Ok, un segundo. Buscando recetas de ${matches.rest.join(" ")}`);
 
-      this.state.searchResultsExposed = 0;
-      this.state.searchResults = [
-        "Receta de tortilla 1",
-        "Receta de tortilla 2",
-      ];
+      const term = matches.rest.join(" ");
+      const results = await api.search(matches.rest.join(" "));
 
-      const candidate = this.state.searchResults[this.state.searchResultsExposed];
+      this.state.searchResultsFound = results.length;
+      this.state.searchResults = results;
 
-      synth.speak(`Tengo dos receta de tortilla. `
-                  + `Te puede intereresar ${candidate}. ¿Empezamos?`);
+      if (this.state.searchResultsFound === 0) {
+        synth.speak("No he encotrado ninguna receta.");
+      } else  if (this.state.searchResultsFound === 1) {
+        const candidate = this.state.searchResults[0];
+        // const candidate = this.state.searchResults[this.state.searchResultsExposed];
+        synth.speak(`Tengo una receta de ${term}. `
+                    + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+
+      } else {
+        if (this.state.searchResultsFound < 6) {
+          const length = this.state.searchResultsFound;
+          const candidate = this.state.searchResults[this.state.searchResultsExposed]
+          synth.speak(`Tengo ${length} recetas de ${term}. `
+                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+        } else {
+          const candidate = this.state.searchResults[this.state.searchResultsExposed]
+          synth.speak(`Tengo muchas recetas de ${term}. `
+                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+        }
+      }
     }
   };
 }
@@ -65,7 +82,7 @@ export function searchNextResultHandler() {
       this.state.searchResultsExposed++;
       if (this.state.searchResults.length > this.state.searchResultsExposed) {
         const candidate = this.state.searchResults[this.state.searchResultsExposed];
-        synth.speak(`La siguiente receta es: ${candidate}. ¿Empezamos?`);
+        synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
       } else {
         synth.speak(`No hay mas recetas!`);
         this.state.searchResultsExposed--;
@@ -73,25 +90,6 @@ export function searchNextResultHandler() {
     }
   };
 }
-
-export function doYouHearMeHandler() {
-  const tokens = [
-    ["me", "escuch"],
-    ["me", "oye"],
-    ["me", "hace", "cas"]
-  ];
-
-  return {
-    async match(input) {
-      return !!matchTokensList(tokens, input);
-    },
-
-    async handle(text) {
-      synth.speak("No, paso de ti");
-    }
-  };
-}
-
 
 export function searchInfoHandler() {
   const tokens = ["mas", "info"];
@@ -192,6 +190,50 @@ export function startHandler() {
     }
   };
 }
+
+// --- Special Handlers
+
+export function doYouHearMeHandler() {
+  const tokens = [
+    ["me", "escuch"],
+    ["me", "oye"],
+    ["me", "hace", "cas"]
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("No, paso de ti");
+    }
+  };
+}
+
+export function howAreYouHandler(){
+  const tokens = [
+    ["com", "estas"],
+    ["como", "va"],
+    ["estas", "bien"]
+  ];
+
+  const responses = [
+    "Eccellente!",
+    "Lasciami in pace!"
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak(responses[Math.floor(Math.random() * responses.length)]);
+    }
+  };
+}
+
 
 // --- Helpers
 
