@@ -85,9 +85,29 @@ async function onEvent(event) {
     choices: ["search", "start", "search/next"]
   });
 
+  stm.add("recipe/ingredients", {
+    handler: handlers.recipeIngredientsHandler,
+    choices: ["recipe/ready"]
+  });
+
+  stm.add("recipe/ready", {
+    handler: handlers.recipeIngredientsReadyHandler,
+    choices: ["recipe/preparation/nextstep"],
+  });
+
+  stm.add("recipe/preparation/nextstep", {
+    handler: handlers.recipePreparationNextStep,
+    choices: ["recipe/preparation/nextstep"],
+  });
+
   stm.add("start", {
     handler: handlers.startHandler,
-    choices: []
+    choices: ["recipe/ingredients"]
+  });
+
+  stm.add("fallback", {
+    global: true,
+    handler: handlers.fallback,
   });
 
   await stm.start();

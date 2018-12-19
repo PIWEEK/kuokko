@@ -28,6 +28,11 @@ export default class StateMachine {
     return null;
   }
 
+  async transitionTo(name) {
+    const handler = this.reg[name];
+    return this.transitionToHandler(handler);
+  }
+
   async transitionToHandler(handler, data) {
     // TODO: check handler type
     if (handler.hidden) {

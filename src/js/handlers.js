@@ -13,7 +13,7 @@ export function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
-      //synth.speak('Benvenutti! Soy kuokko, busca una receta');
+      synth.speak('Benvenutti! Soy kuokko, busca una receta');
       console.warn('Manifest para móvil');
     }
   }
@@ -79,7 +79,6 @@ export function searchNextResultHandler() {
 
   return {
     async match(input) {
-      // debugger
       return !!matchTokensList(tokens, input);
     },
 
@@ -222,10 +221,139 @@ export function startHandler() {
     },
 
     async handle(text) {
-      synth.speak("TODO: estamos empezando.")
+      synth.speak("Perfecto, Primero vamos a preparar los ingredientes. ¿Preparado?");
     }
   };
 }
+
+export function recipeIngredientsHandler() {
+  const tokens = [
+    ["si"],
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      const recipe = this.state.recipe;
+      synth.speak("Ok, los ingredientes son:");
+
+      for (let item of recipe.ingredients) {
+        const result = [];
+        if (item.quantity) {
+          result.push(item.quantity, "de");
+        }
+
+        result.push(item.name);
+
+        if (item.preparation) result.push(item.preparation);
+
+        synth.speak(`${result.join(" ")},`);
+      }
+
+      synth.speak("¿Los tienes preparados?");
+    }
+  };
+}
+
+export function recipeIngredientsReadyHandler() {
+  const tokens = [
+    ["si"],
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      const recipe = this.state.recipe;
+
+      this.state.recipeSteps = recipe.method.reduce((acc, {steps}) => {
+        return [...acc, ...steps];
+      }, []);
+
+      this.state.recipeStepsNumber = this.state.recipeSteps.length;
+      this.state.recipeCurrentStep = -1;
+
+      synth.speak("Pues empecemos:");
+      this.transitionTo("recipe/preparation/nextstep");
+    }
+  };
+}
+
+export function fallback() {
+  const tokens = [
+    ["rapido"],
+  ];
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle() {
+      const results = await api.search("paella");
+
+      this.state.searchResults = results;
+      this.state.searchResultsFound = results.length;
+      this.state.searchResultsIndex = 0;
+      this.state.recipe = results[0];
+
+      this.transitionTo("recipe/ready");
+    }
+  }
+}
+
+
+export function recipePreparationNextStep() {
+  const tokens = [
+    ["siguient", "paso"],
+    ["siguient", "cuoco"],
+    ["siguient", "coco"],
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      const recipe  = this.state.recipe;
+      const steps   = this.state.recipeSteps;
+      const current = ++this.state.recipeCurrentStep;
+
+      if (current < steps.length) {
+        const step = steps[current];
+        if (step.action === "add") {
+          synth.speak(`Añada ${step.ingredient.name}.`);
+          if (step.note) {
+            synth.speak(step.note);
+          }
+        } else if (step.action === "wait") {
+          // TODO: handle properly times and notes
+          synth.speak(`Espere ${step.time}.`);
+          if (step.note) {
+            synth.speak(step.note);
+          }
+        } else if (step.action === "techique") {
+          synth.speak(`${step.techique.name}.`)
+          if (step.note) {
+            synth.speak(step.note);
+          }
+        } else if (step.action === "other") {
+          synth.speak(step.description);
+        } else {
+          synth.speak("Esta receta es una mierda y no esta completa!");
+        }
+      } else {
+        synth.speak("TODO");
+      }
+    }
+  };
+}
+
 
 // --- Special Handlers
 
