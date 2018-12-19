@@ -1,1 +1,0 @@
-const t=window.kuokko.h;class e{getText(){return"patata"}render(){return t("div",null,"Hello, World! I'm ",this.getText())}static get is(){return"kuo-receipts"}static get encapsulation(){return"shadow"}static get properties(){return{receipts:{type:"Any",attr:"receipts"}}}static get style(){return"/**style-placeholder:kuo-receipts:**/"}}export{e as KuoReceipts};
