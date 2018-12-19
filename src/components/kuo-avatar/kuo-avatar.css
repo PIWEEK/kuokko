@@ -17,6 +17,17 @@
       0 0 0 2rem var(--graylight);
     animation: kuokkoShadow 0.5s infinite alternate;
   }
+
+  .kuokko-face.on-match {
+    box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 80%),
+      0 0 0 2rem var(--graylight);
+    animation: kuokkoMatch 0.5s;
+  }
+  
+  .kuokko-logo {
+    width: 100%;
+  }
   
   @keyframes kuokkoShadow {
     from {
@@ -30,7 +41,26 @@
         0 0 0 2.75rem var(--graylight);
     }
   }
-  
-  .kuokko-logo {
-    width: 100%;
+
+  @keyframes kuokkoMatch {
+    0 {
+      box-shadow:
+        0 0 1rem 10px hsl(0, 0%, 80%),
+        0 0 0 2rem var(--graylight);
+    }
+    20% {
+      box-shadow:
+        0 0 1rem 10px #92d4a4,
+        0 0 0 2.2rem #aeebbe;
+    }
+    80% {
+      box-shadow:
+        0 0 1rem 10px #92d4a4,
+        0 0 0 2.2rem #aeebbe;
+    }
+    100% {
+      box-shadow:
+        0 0 1rem 10px hsl(0, 0%, 70%),
+        0 0 0 2rem var(--graylight);
+    }
   }
