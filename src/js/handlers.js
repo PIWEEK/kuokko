@@ -13,8 +13,7 @@ export function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
-      synth.speak('Benvenutti! Soy kuokko, busca una receta');
-      console.warn('Manifest para móvil');
+      // synth.speak('Benvenutti! Soy kuokko, busca una receta');
     }
   }
 }
@@ -159,7 +158,7 @@ export function searchInfoDifficultyHandler() {
 
     async handle(text) {
       const recipe = this.state.recipe;
-      let msg = "La receta es de dicultad ";
+      let msg = "La receta es de dificultad ";
 
       if (recipe.dificulty === "easy") {
         msg += "baja.";

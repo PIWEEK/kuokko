@@ -44,11 +44,17 @@ export namespace Components {
     'middle'?: string;
   }
 
-  interface KuoMain {}
+  interface KuoMain {
+    'renderRecipes': (recipes: any) => Promise<any>;
+  }
   interface KuoMainAttributes extends StencilHTMLAttributes {}
 
-  interface KuoRecipes {}
-  interface KuoRecipesAttributes extends StencilHTMLAttributes {}
+  interface KuoRecipes {
+    'recipes': any;
+  }
+  interface KuoRecipesAttributes extends StencilHTMLAttributes {
+    'recipes'?: any;
+  }
 }
 
 declare global {
