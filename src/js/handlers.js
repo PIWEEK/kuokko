@@ -337,7 +337,7 @@ export function recipePreparationNextStep() {
           if (step.note) {
             synth.speak(step.note);
           }
-        } else if (step.action === "techique") {
+        } else if (step.action === "technique") {
           synth.speak(`${step.techique.name}.`)
           if (step.note) {
             synth.speak(step.note);
