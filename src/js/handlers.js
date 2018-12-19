@@ -3,6 +3,7 @@ import slugify from "speakingurl";
 
 import * as synth from "./speechSynthesis";
 import * as api from "./api";
+import * as events from "./events";
 
 // --- Handlers
 
@@ -38,6 +39,8 @@ export function searchHandler() {
       const term = matches.rest.join(" ");
       const results = await api.search(matches.rest.join(" "));
 
+      events.emit("search", results);
+
       this.state.searchResults = results;
       this.state.searchResultsFound = results.length;
       this.state.searchResultsIndex = 0;
@@ -46,6 +49,8 @@ export function searchHandler() {
         synth.speak("No he encotrado ninguna receta.");
       } else {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
+
+        events.emit("recipe", candidate);
         if (this.state.searchResultsFound === 1) {
           // const candidate = this.state.searchResults[this.state.searchResultsExposed];
           synth.speak(`Tengo una receta de ${term}. `
