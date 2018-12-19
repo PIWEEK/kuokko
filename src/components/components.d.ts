@@ -12,6 +12,9 @@ import '@stencil/core';
 
 export namespace Components {
 
+  interface KuoAvatar {}
+  interface KuoAvatarAttributes extends StencilHTMLAttributes {}
+
   interface KuoExample {
     /**
     * The first name
@@ -41,21 +44,34 @@ export namespace Components {
     'middle'?: string;
   }
 
-  interface KuoReceipts {}
-  interface KuoReceiptsAttributes extends StencilHTMLAttributes {}
+  interface KuoMain {}
+  interface KuoMainAttributes extends StencilHTMLAttributes {}
+
+  interface KuoRecipes {}
+  interface KuoRecipesAttributes extends StencilHTMLAttributes {}
 }
 
 declare global {
   interface StencilElementInterfaces {
+    'KuoAvatar': Components.KuoAvatar;
     'KuoExample': Components.KuoExample;
-    'KuoReceipts': Components.KuoReceipts;
+    'KuoMain': Components.KuoMain;
+    'KuoRecipes': Components.KuoRecipes;
   }
 
   interface StencilIntrinsicElements {
+    'kuo-avatar': Components.KuoAvatarAttributes;
     'kuo-example': Components.KuoExampleAttributes;
-    'kuo-receipts': Components.KuoReceiptsAttributes;
+    'kuo-main': Components.KuoMainAttributes;
+    'kuo-recipes': Components.KuoRecipesAttributes;
   }
 
+
+  interface HTMLKuoAvatarElement extends Components.KuoAvatar, HTMLStencilElement {}
+  var HTMLKuoAvatarElement: {
+    prototype: HTMLKuoAvatarElement;
+    new (): HTMLKuoAvatarElement;
+  };
 
   interface HTMLKuoExampleElement extends Components.KuoExample, HTMLStencilElement {}
   var HTMLKuoExampleElement: {
@@ -63,20 +79,30 @@ declare global {
     new (): HTMLKuoExampleElement;
   };
 
-  interface HTMLKuoReceiptsElement extends Components.KuoReceipts, HTMLStencilElement {}
-  var HTMLKuoReceiptsElement: {
-    prototype: HTMLKuoReceiptsElement;
-    new (): HTMLKuoReceiptsElement;
+  interface HTMLKuoMainElement extends Components.KuoMain, HTMLStencilElement {}
+  var HTMLKuoMainElement: {
+    prototype: HTMLKuoMainElement;
+    new (): HTMLKuoMainElement;
+  };
+
+  interface HTMLKuoRecipesElement extends Components.KuoRecipes, HTMLStencilElement {}
+  var HTMLKuoRecipesElement: {
+    prototype: HTMLKuoRecipesElement;
+    new (): HTMLKuoRecipesElement;
   };
 
   interface HTMLElementTagNameMap {
+    'kuo-avatar': HTMLKuoAvatarElement
     'kuo-example': HTMLKuoExampleElement
-    'kuo-receipts': HTMLKuoReceiptsElement
+    'kuo-main': HTMLKuoMainElement
+    'kuo-recipes': HTMLKuoRecipesElement
   }
 
   interface ElementTagNameMap {
+    'kuo-avatar': HTMLKuoAvatarElement;
     'kuo-example': HTMLKuoExampleElement;
-    'kuo-receipts': HTMLKuoReceiptsElement;
+    'kuo-main': HTMLKuoMainElement;
+    'kuo-recipes': HTMLKuoRecipesElement;
   }
 
 

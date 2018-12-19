@@ -3,8 +3,8 @@ import { Component } from '@stencil/core';
 // import bus from '../../js/events';
 
 @Component({
-  tag: 'kuo-receipts',
-  styleUrl: 'kuo-receipts.css',
+  tag: 'kuo-recipes',
+  styleUrl: 'kuo-recipes.css',
   shadow: true
 })
 
@@ -76,11 +76,17 @@ export class MyComponent {
   private renderReceipt(receipt, index) {
     if (index === 0) {
       return (
-        <h1>{receipt.title}</h1>
+        <div>
+          <h1>{receipt.title}</h1>
+          <p>{receipt.cookTime}</p>
+        </div>
       )
     } else {
       return (
-        <h2>{receipt.title}</h2>
+        <div>
+          <h2>{receipt.title}</h2>
+          <p>{receipt.cookTime}</p>
+        </div>
       )
     }
   }

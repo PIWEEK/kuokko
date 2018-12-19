@@ -1,0 +1,9 @@
+.title {
+  font-weight: var(--medium);
+  font-size: var(--large);
+}
+
+.feedback {
+  color: var(--gray);
+  font-size: var(--small);
+}
