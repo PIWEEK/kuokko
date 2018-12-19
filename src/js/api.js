@@ -16,8 +16,8 @@ function composeUrl(baseUrl, suffix, params=null) {
   return url.format(_url);
 }
 
-function makeSearch(name) {
-  const url = composeUrl(baseUrl, "/recipes", {name});
+function makeSearch(title) {
+  const url = composeUrl(baseUrl, "/recipes", {title});
 
   const request = new Request(url, {
     method: "GET",

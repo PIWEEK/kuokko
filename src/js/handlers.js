@@ -38,27 +38,27 @@ export function searchHandler() {
       const term = matches.rest.join(" ");
       const results = await api.search(matches.rest.join(" "));
 
-      this.state.searchResultsFound = results.length;
       this.state.searchResults = results;
+      this.state.searchResultsFound = results.length;
+      this.state.searchResultsIndex = 0;
 
       if (this.state.searchResultsFound === 0) {
         synth.speak("No he encotrado ninguna receta.");
-      } else  if (this.state.searchResultsFound === 1) {
-        const candidate = this.state.searchResults[0];
-        // const candidate = this.state.searchResults[this.state.searchResultsExposed];
-        synth.speak(`Tengo una receta de ${term}. `
-                    + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
-
       } else {
-        if (this.state.searchResultsFound < 6) {
-          const length = this.state.searchResultsFound;
-          const candidate = this.state.searchResults[this.state.searchResultsExposed]
-          synth.speak(`Tengo ${length} recetas de ${term}. `
+        const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
+        if (this.state.searchResultsFound === 1) {
+          // const candidate = this.state.searchResults[this.state.searchResultsExposed];
+          synth.speak(`Tengo una receta de ${term}. `
                       + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+
         } else {
-          const candidate = this.state.searchResults[this.state.searchResultsExposed]
-          synth.speak(`Tengo muchas recetas de ${term}. `
-                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+          if (this.state.searchResultsFound < 6) {
+            synth.speak(`Tengo ${length} recetas de ${term}. `
+                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+          } else {
+            synth.speak(`Tengo muchas recetas de ${term}. `
+                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+          }
         }
       }
     }
@@ -79,13 +79,13 @@ export function searchNextResultHandler() {
     },
 
     async handle(text) {
-      this.state.searchResultsExposed++;
-      if (this.state.searchResults.length > this.state.searchResultsExposed) {
-        const candidate = this.state.searchResults[this.state.searchResultsExposed];
+      this.state.searchResultsIndex++;
+      if (this.state.searchResults.length > this.state.searchResultsIndex) {
+        const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
         synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
       } else {
         synth.speak(`No hay mas recetas!`);
-        this.state.searchResultsExposed--;
+        this.state.searchResultsIndex--;
       }
     }
   };
@@ -100,8 +100,22 @@ export function searchInfoHandler() {
     },
 
     async handle(text) {
-      synth.speak("Es una receta de 4 personas, de dificultad baja. " +
-                  "El tiempo de elaboracion es de 40 minutos.")
+      const recipe = this.state.recipe;
+
+      let msg = `Es una receta de 4 personas, `;
+
+      if (recipe.dificulty === "easy") {
+        msg += "de dificultad baja.";
+      } else if (recipe.dificultad === "medium") {
+        msg += "de dificultad media.";
+      } else {
+        msg += "de dificultad alta.";
+      }
+
+      const time = parseMinutes(recipe.cookTime);
+      msg += `El tiempo de elaboracion es de ${time} minutos`;
+
+      synth.speak(msg)
       synth.speak("¿Empezamos?")
     }
   };
@@ -119,7 +133,11 @@ export function searchInfoTimeHandler() {
     },
 
     async handle(text) {
-      synth.speak("El tiempo de elaboracion es de 40 minutos. ¿Quieres saber algo mas?")
+      const recipe = this.state.recipe;
+      const time = parseMinutes(recipe.cookTime);
+      const msg = (`El tiempo de elaboracion es de ${time} minutos` +
+                   "¿Quieres saber algo mas?");
+      synth.speak(msg);
     }
   };
 }
@@ -136,7 +154,20 @@ export function searchInfoDifficultyHandler() {
     },
 
     async handle(text) {
-      synth.speak("La receta es de dificultad baja. ¿Quieres saber algo mas?")
+      const recipe = this.state.recipe;
+      let msg = "La receta es de dicultad ";
+
+      if (recipe.dificulty === "easy") {
+        msg += "baja.";
+      } else if (recipe.dificultad === "medium") {
+        msg += "media.";
+      } else {
+        msg += "alta.";
+      }
+
+      msg += "¿Quieres saber algo mas?";
+
+      synth.speak(msg)
     }
   };
 }
@@ -219,8 +250,7 @@ export function howAreYouHandler(){
   ];
 
   const responses = [
-    "Eccellente!",
-    "Lasciami in pace!"
+    "Eccellente!"
   ];
 
   return {
@@ -234,8 +264,12 @@ export function howAreYouHandler(){
   };
 }
 
-
 // --- Helpers
+
+function parseMinutes(v) {
+  const result = /\d+/.exec(v);
+  return result[0];
+};
 
 function tokenize(text) {
   return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);

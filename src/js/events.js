@@ -1,3 +1,9 @@
 import * as rx from 'rxjs';
 
-export default new rx.BehaviorSubject();
+const bus = new rx.BehaviorSubject();
+
+export function emit(type, payload) {
+  bus.next({type, payload});
+};
+
+export default bus;
