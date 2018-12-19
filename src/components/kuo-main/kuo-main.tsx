@@ -1,5 +1,4 @@
-import { Component, Method } from '@stencil/core';
-import { subscribe } from '../../js/events';
+import { Component, Method, State } from '@stencil/core';
 
 @Component({
   tag: 'kuo-main',
@@ -9,21 +8,21 @@ import { subscribe } from '../../js/events';
 
 export class KuoMain {
 
-  recipes = {};
+  @State() recipes: any[] = [];
   
   componentWillLoad() {
-    console.log('componentWillLoad');
-    subscribe('search', (event) => {
-      console.log('main', event);
-      // this.recipes = event.payload;
+    document.addEventListener('kuokko:search', (event: any) => {
+      console.log('kuokko:search', event.detail);
+      this.recipes = event.detail;
     });
   }
 
   @Method()
-  async renderRecipes(recipes) {
+  renderRecipes(recipes) {
+    console.log('renderRecipes', recipes)
     if (recipes) {
       return (
-        <kuo-recipes>
+        <kuo-recipes recipes={recipes}>
         </kuo-recipes>
       ) 
     }

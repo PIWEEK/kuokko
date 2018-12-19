@@ -7,7 +7,7 @@ function internalCreate() {
   return new rx.Observable((subscriber) => {
     const id = counter++;
 
-    console.log("speechRecognition:subscribe", id);
+    // console.log("speechRecognition:subscribe", id);
     const recognition = new webkitSpeechRecognition();
     recognition.lang = 'es-ES'; // sets the language of the current SpeechRecognition
     recognition.interimResults = false; // Controls if returns non final results
@@ -18,16 +18,16 @@ function internalCreate() {
     let error = null;
 
     recognition.onaudiostart = (event) => {
-      console.log("speechRecognition:onaudiostart", id, event);
+      // console.log("speechRecognition:onaudiostart", id, event);
     };
 
     recognition.onaudioend = (event) => {
-      console.log("speechRecognition:onaudioend", id, event);
+      // console.log("speechRecognition:onaudioend", id, event);
     };
 
     recognition.onend = (event) => {
       if (stoped) return;
-      console.log("speechRecognition:onend", id, event);
+      // console.log("speechRecognition:onend", id, event);
       setTimeout(() => {
         stoped = true;
         if (error) {
@@ -52,31 +52,31 @@ function internalCreate() {
     };
 
     recognition.onnomatch = (event) => {
-      console.log("speechRecognition:onnomatch", id, event);
+      // console.log("speechRecognition:onnomatch", id, event);
     };
 
     recognition.onstart = (event) => {
-      console.log("speechRecognition:onstart", id);
-      // console.log("Speech Recognition initialized");
+      // console.log("speechRecognition:onstart", id);
+      // // console.log("Speech Recognition initialized");
     };
 
     recognition.onspeechstart = (event) => {
-      console.log("speechRecognition:onspeechstart", id);
+      // console.log("speechRecognition:onspeechstart", id);
     };
 
     recognition.onspeechend = (event) => {
-      console.log("speechRecognition:onspeechend", id);
+      // console.log("speechRecognition:onspeechend", id);
     };
 
     recognition.onresult = (event) => {
-      console.log("speechRecognition:onresult", id, event);
+      // console.log("speechRecognition:onresult", id, event);
       subscriber.next(event.results[event.resultIndex]);
     };
 
     recognition.start(); // Starts the speech recognition service listening to incoming audio
 
     return function unsubscribe() {
-      console.log("speechRecognition:unsubscribe", id);
+      // console.log("speechRecognition:unsubscribe", id);
       recognition.stop();
       // recognition.abort();
     };

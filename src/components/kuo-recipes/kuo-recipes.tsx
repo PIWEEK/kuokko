@@ -11,8 +11,12 @@ import {
 
 export class KuoRecipes {
 
-  @Prop() recipes: any;
+  @Prop() recipes: any[];
 
+  componentWillUpdate() {
+    console.log('kuo-recipes', this.recipes);
+  }
+  
   private renderRecipes(recipe, index) {
     if (index === 0) {
       return (
@@ -32,6 +36,7 @@ export class KuoRecipes {
   }
   
   render() {
+    console.log('kuo-recipes', this.recipes);
     return (
       <div>
         {this.recipes.map((recipe, index) =>

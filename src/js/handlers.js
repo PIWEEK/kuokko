@@ -20,6 +20,7 @@ export function initialHandler() {
 
 export function searchHandler() {
   const tokens = [
+    ["dam", "recet", "de"],
     ["busc", "recet", "de"],
     ["tien", "recet", "de"],
   ];
