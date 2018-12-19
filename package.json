@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./scripts/build.js build",
-    "watch": "node ./scripts/build.js watch"
+    "watch": "node ./scripts/build.js watch",
+    "stencil:build": "stencil build --docs",
+    "stencil:start": "stencil build --dev --watch --serve"
   },
   "repository": {
     "type": "git",
@@ -21,14 +23,16 @@
     "lodash": "^4.17.11",
     "minimatch": "^3.0.4",
     "rxjs": "^6.3.3",
-    "speakingurl": "^14.0.1"
+    "speakingurl": "^14.0.1",
+    "stencil": "0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.0",
+    "@stencil/core": "^0.16.1",
     "babelify": "^10.0.0",
-    "browserify": "^16.2.3",
     "browser-sync": "^2.26.3",
+    "browserify": "^16.2.3",
     "terser": "^3.11.0"
   }
 }

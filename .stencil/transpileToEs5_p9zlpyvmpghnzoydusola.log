@@ -1,0 +1,48 @@
+import { h } from '../kuokko.core.js';
+var MyComponent = /** @class */ (function () {
+    function MyComponent() {
+    }
+    MyComponent.prototype.getText = function () {
+        return this.first + " " + this.middle + ", " + this.last;
+    };
+    MyComponent.prototype.render = function () {
+        return h("div", null, "Hello, World! I'm ", this.getText());
+    };
+    Object.defineProperty(MyComponent, "is", {
+        get: function () { return "example"; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "encapsulation", {
+        get: function () { return "shadow"; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "properties", {
+        get: function () {
+            return {
+                "first": {
+                    "type": String,
+                    "attr": "first"
+                },
+                "last": {
+                    "type": String,
+                    "attr": "last"
+                },
+                "middle": {
+                    "type": String,
+                    "attr": "middle"
+                }
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "style", {
+        get: function () { return "/**style-placeholder:example:**/"; },
+        enumerable: true,
+        configurable: true
+    });
+    return MyComponent;
+}());
+export { MyComponent as Example };

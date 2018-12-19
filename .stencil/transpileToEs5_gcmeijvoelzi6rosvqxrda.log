@@ -1,0 +1,40 @@
+import { h } from '../kuokko.core.js';
+var MyComponent = /** @class */ (function () {
+    function MyComponent() {
+    }
+    MyComponent.prototype.getText = function () {
+        return 'patata';
+    };
+    MyComponent.prototype.render = function () {
+        return h("div", null, "Hello, World! I'm ", this.getText());
+    };
+    Object.defineProperty(MyComponent, "is", {
+        get: function () { return "kuo-receipts"; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "encapsulation", {
+        get: function () { return "shadow"; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "properties", {
+        get: function () {
+            return {
+                "receipts": {
+                    "type": "Any",
+                    "attr": "receipts"
+                }
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MyComponent, "style", {
+        get: function () { return "/**style-placeholder:kuo-receipts:**/"; },
+        enumerable: true,
+        configurable: true
+    });
+    return MyComponent;
+}());
+export { MyComponent as KuoReceipts };

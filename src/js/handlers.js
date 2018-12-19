@@ -111,7 +111,7 @@ export function searchInfoHandler() {
 
 export function searchInfoTimeHandler() {
   const tokens = [
-    ["cuant", "tarda"]
+    ["cuant", "tarda"],
     ["cuant", "tiemp"]
   ];
 
