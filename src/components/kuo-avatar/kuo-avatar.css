@@ -1,13 +1,17 @@
+:host {
+  display: block;
+}
+
 :host .kuokko-face {
-    margin: 4rem auto;
-    width: 100px;
-    height: 100px;
-    background: var(--white);
-    border-radius: 50%;
-    padding: 2rem;
-    border: 1px solid var(--graylight);
-    box-shadow:
-      0 0 1rem 10px hsl(0, 0%, 80%),
+  margin: 4rem auto;
+  width: 100px;
+  height: 100px;
+  background: var(--white);
+  border-radius: 50%;
+  padding: 2rem;
+  border: 1px solid var(--graylight);
+  box-shadow:
+    0 0 1rem 10px hsl(0, 0%, 80%),
       0 0 0 2rem var(--graylight);
 }
 

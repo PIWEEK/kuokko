@@ -121,7 +121,8 @@ async function onEvent(event) {
   //   handler: handlers.fallback,
   // });
 
-  document.querySelector("body").addEventListener("click", async (event) => {
+  document.addEventListener("kuokko:start", async (event) => {
+    console.log(event);
     const subscription = sr.create().subscribe(onEvent.bind(stm));
     await stm.start(subscription);
     window.stm = stm;
