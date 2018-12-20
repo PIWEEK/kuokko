@@ -22,6 +22,15 @@ export namespace Components {
   interface KuoMain {}
   interface KuoMainAttributes extends StencilHTMLAttributes {}
 
+  interface KuoRecipeCard {
+    'isMain': boolean;
+    'recipe': any;
+  }
+  interface KuoRecipeCardAttributes extends StencilHTMLAttributes {
+    'isMain'?: boolean;
+    'recipe'?: any;
+  }
+
   interface KuoRecipeDetail {
     'recipe': any;
   }
@@ -41,6 +50,7 @@ declare global {
   interface StencilElementInterfaces {
     'KuoAvatar': Components.KuoAvatar;
     'KuoMain': Components.KuoMain;
+    'KuoRecipeCard': Components.KuoRecipeCard;
     'KuoRecipeDetail': Components.KuoRecipeDetail;
     'KuoRecipes': Components.KuoRecipes;
   }
@@ -48,6 +58,7 @@ declare global {
   interface StencilIntrinsicElements {
     'kuo-avatar': Components.KuoAvatarAttributes;
     'kuo-main': Components.KuoMainAttributes;
+    'kuo-recipe-card': Components.KuoRecipeCardAttributes;
     'kuo-recipe-detail': Components.KuoRecipeDetailAttributes;
     'kuo-recipes': Components.KuoRecipesAttributes;
   }
@@ -65,6 +76,12 @@ declare global {
     new (): HTMLKuoMainElement;
   };
 
+  interface HTMLKuoRecipeCardElement extends Components.KuoRecipeCard, HTMLStencilElement {}
+  var HTMLKuoRecipeCardElement: {
+    prototype: HTMLKuoRecipeCardElement;
+    new (): HTMLKuoRecipeCardElement;
+  };
+
   interface HTMLKuoRecipeDetailElement extends Components.KuoRecipeDetail, HTMLStencilElement {}
   var HTMLKuoRecipeDetailElement: {
     prototype: HTMLKuoRecipeDetailElement;
@@ -80,6 +97,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'kuo-avatar': HTMLKuoAvatarElement
     'kuo-main': HTMLKuoMainElement
+    'kuo-recipe-card': HTMLKuoRecipeCardElement
     'kuo-recipe-detail': HTMLKuoRecipeDetailElement
     'kuo-recipes': HTMLKuoRecipesElement
   }
@@ -87,6 +105,7 @@ declare global {
   interface ElementTagNameMap {
     'kuo-avatar': HTMLKuoAvatarElement;
     'kuo-main': HTMLKuoMainElement;
+    'kuo-recipe-card': HTMLKuoRecipeCardElement;
     'kuo-recipe-detail': HTMLKuoRecipeDetailElement;
     'kuo-recipes': HTMLKuoRecipesElement;
   }
