@@ -1,13 +1,17 @@
 :host {
+  --time: 0.5s;
+  --ease: ease-out;
   display: block;
 }
 
 :host .kuokko-face {
-  margin: 4rem auto;
+  margin: 3rem auto;
   width: 100px;
   height: 100px;
   background: var(--white);
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
   border: 1px solid var(--graylight);
   box-shadow:
     0 0 1rem 3px hsl(0, 0%, 80%),
@@ -28,12 +32,57 @@
   animation: kuokkoMatch 0.5s;
 }
 
-.kuokko-logo {
-  width: 100%;
+.kuokko-face .face-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(0.75rem) translateY(0.25rem);
+  transition: all var(--time) var(--ease);
 }
 
-.hidden {
-  display: none
+.kuokko-face.open .face-wrapper {
+  transition: all var(--time) var(--ease);
+  transform: translateX(0) translateY(0);
+}
+
+.kuokko-face .eyeface {
+  display: flex;
+  justify-content: center;
+}
+
+.kuokko-face .eye {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin: 0.5rem;
+  background: var(--gray800);;
+  border-radius: 0 0 50% 50%;
+  transform: scaleY(0.1) scaleX(0.8);
+  transition: all var(--time) var(--ease);
+  content: "";
+}
+
+.kuokko-face.open .eye {
+  border-radius: 50%;
+  transform: scaleY(1);
+  transition: all var(--time) var(--ease);
+}
+
+.kuokko-face .moustache {
+  width: 2.5rem;
+  margin: 0 auto;
+  fill: var(--gray800);
+}
+.kuokko-face.open .mouth {
+  transform: scale(0);
+}
+
+.kuokko-face .mouth {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--gray800);;
+  border-radius: 50%;
+  transition: all var(--time) var(--ease);
 }
 
 @keyframes kuokkoShadow {

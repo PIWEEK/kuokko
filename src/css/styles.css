@@ -3,10 +3,11 @@
 :root {
   --kuokko: #3a3f47;
   --white: #ffffff;
+  --gray800: #3a3f47;
   --gray: #7a8395;
   --graylight: #f2f3f4;
 
-  --large: 2rem;
+  --large: 1.2rem;
   --medium: 1rem;
   --small: 0.9rem;
 
@@ -31,5 +32,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }

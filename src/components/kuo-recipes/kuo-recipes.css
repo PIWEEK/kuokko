@@ -31,9 +31,6 @@
   .recipes-layout {
     display: grid;
     grid-gap: 1rem;
-    justify-items: center;
-    justify-content: start;
-    align-content: start;
     grid-template-columns: repeat(3, 33%);
   }
 

@@ -1,10 +1,22 @@
-.is-main {
-  display: flex;
+
+@media (min-width: 1024px) {
+  .is-main {
+    display: flex;
+    background: var(--white);
+  }
+  
+  .is-main img {
+      width: 474px;
+      height: 203px;
+  }
+
+  .recipe {
+    margin-bottom: 0;
+  }
 }
 
-.is-main img {
-    width: 474px;
-    height: 203px;
+.recipe {
+  margin-bottom: 2rem;
 }
 
 .recipe-pic {

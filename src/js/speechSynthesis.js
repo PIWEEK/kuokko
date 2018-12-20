@@ -7,9 +7,9 @@ export function speak(message) {
 
     msg.voice = VOICES[9];
     msg.volume = 1; // 0 to 1
-    msg.lang = 'it-IT';
+    msg.lang = 'fr-FR';
     // msg.rate = 1; // 0.1 to 10
-    // msg.pitch = 2; //0 to 2
+    // msg.pitch = 1.8; //0 to 2
 
     msg.onerror = (e) => {
       console.log(e.error, e);

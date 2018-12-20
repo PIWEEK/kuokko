@@ -1,4 +1,5 @@
 import { Component, State } from '@stencil/core';
+import Fragment from 'stencil-fragment'
 
 @Component({
     tag: 'kuo-main',
@@ -95,19 +96,21 @@ export class KuoMain {
         }
 
         return (
-            <main class="container">
-                <section class="kuokko-area">
-                    <h1 class="title">Benvenutti!<br /> Soy Kuokko.</h1>
+            <Fragment>
+                <section class="kuokko-area kuokko-sticky">
+                  <div class="kuokko-sticky">
+                    <h1 class="title">Benvenutti! Soy Kuokko.</h1>
                     <p class="tagline">¿Qué te apetece cocinar?</p>
                     <kuo-avatar speech={this.speech}></kuo-avatar>
                     <div class="feedback">
                         Escuchando...
                     </div>
+                  </div>
                 </section>
                 <section class="kuokko-interactive">
-                    { section }
+                  { section }
                 </section>
-            </main>
+            </Fragment>
         );
     }
 }
