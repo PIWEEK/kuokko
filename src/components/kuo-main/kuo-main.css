@@ -1,9 +1,46 @@
+.container {
+  width: 100%;
+  margin-top: 3rem;
+}
+
+.kuokko-area {
+  text-align: center;
+  position: sticky;
+  top: 0;
+}
+
 .title {
-  font-weight: var(--medium);
-  font-size: var(--large);
+  font-size: var(--medium);
+}
+
+.tagline {
+  font-size: var(--small);
 }
 
 .feedback {
   color: var(--gray);
   font-size: var(--small);
+}
+
+@media (min-width: 1200px) {
+  .container {
+    display: flex;
+    max-width: 1200px;
+    width: 100vw;
+    margin: 3rem auto 0;
+    min-height: 100vh;
+  }
+  
+  .kuokko-area {
+    text-align: center;
+    position: sticky;
+    top: 0;
+  }
+  
+  .kuokko-interactive {
+    padding-left: 4rem;
+    flex-grow: 3;
+    flex-shrink: 0;
+    flex-basis: 800px;
+  }
 }

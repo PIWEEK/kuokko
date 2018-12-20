@@ -44,12 +44,6 @@ function internalCreate() {
     recognition.onerror = (event) => {
       if (stoped) return;
       error = event
-
-      // setTimeout(() => {
-
-      //   stoped = true;
-      //   subscriber.error(event);
-      // }, 300);
     };
 
     recognition.onnomatch = (event) => {
