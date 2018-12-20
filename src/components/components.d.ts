@@ -22,6 +22,13 @@ export namespace Components {
   interface KuoMain {}
   interface KuoMainAttributes extends StencilHTMLAttributes {}
 
+  interface KuoRecipeDetail {
+    'recipe': any;
+  }
+  interface KuoRecipeDetailAttributes extends StencilHTMLAttributes {
+    'recipe'?: any;
+  }
+
   interface KuoRecipes {
     'recipes': any[];
   }
@@ -34,12 +41,14 @@ declare global {
   interface StencilElementInterfaces {
     'KuoAvatar': Components.KuoAvatar;
     'KuoMain': Components.KuoMain;
+    'KuoRecipeDetail': Components.KuoRecipeDetail;
     'KuoRecipes': Components.KuoRecipes;
   }
 
   interface StencilIntrinsicElements {
     'kuo-avatar': Components.KuoAvatarAttributes;
     'kuo-main': Components.KuoMainAttributes;
+    'kuo-recipe-detail': Components.KuoRecipeDetailAttributes;
     'kuo-recipes': Components.KuoRecipesAttributes;
   }
 
@@ -56,6 +65,12 @@ declare global {
     new (): HTMLKuoMainElement;
   };
 
+  interface HTMLKuoRecipeDetailElement extends Components.KuoRecipeDetail, HTMLStencilElement {}
+  var HTMLKuoRecipeDetailElement: {
+    prototype: HTMLKuoRecipeDetailElement;
+    new (): HTMLKuoRecipeDetailElement;
+  };
+
   interface HTMLKuoRecipesElement extends Components.KuoRecipes, HTMLStencilElement {}
   var HTMLKuoRecipesElement: {
     prototype: HTMLKuoRecipesElement;
@@ -65,12 +80,14 @@ declare global {
   interface HTMLElementTagNameMap {
     'kuo-avatar': HTMLKuoAvatarElement
     'kuo-main': HTMLKuoMainElement
+    'kuo-recipe-detail': HTMLKuoRecipeDetailElement
     'kuo-recipes': HTMLKuoRecipesElement
   }
 
   interface ElementTagNameMap {
     'kuo-avatar': HTMLKuoAvatarElement;
     'kuo-main': HTMLKuoMainElement;
+    'kuo-recipe-detail': HTMLKuoRecipeDetailElement;
     'kuo-recipes': HTMLKuoRecipesElement;
   }
 
