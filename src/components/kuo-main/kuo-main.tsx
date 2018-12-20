@@ -12,7 +12,7 @@ export class KuoMain {
   @State() speech: string = '';
 
   searchRecipes() {
-    const baseUrl = "http://quotes.kaleidos.net:3333"
+    const baseUrl = (window as any).kuokkoConfig.baseUrl;
 
     function makeSearch() {
       const url = `${baseUrl}/recipes`;

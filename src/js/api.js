@@ -3,10 +3,8 @@ import * as l from "lodash";
 import url from "url";
 import qs from "querystring";
 
-const baseUrl = "http://quotes.kaleidos.net:3333";
-
-function composeUrl(baseUrl, suffix, params=null) {
-  const _url = url.parse(baseUrl);
+function composeUrl(suffix, params=null) {
+  const _url = url.parse(window.kuokkoConfig.baseUrl);
   _url.pathname = suffix;
 
   if (params) {
@@ -17,7 +15,7 @@ function composeUrl(baseUrl, suffix, params=null) {
 }
 
 function makeSearch(title) {
-  const url = composeUrl(baseUrl, "/recipes", {title});
+  const url = composeUrl("/recipes", {title});
 
   const request = new Request(url, {
     method: "GET",
@@ -30,7 +28,7 @@ function makeSearch(title) {
 }
 
 function getRecipe(id) {
-  const url = composeUrl(baseUrl, `/recipes/${id}`);
+  const url = composeUrl(`/recipes/${id}`);
 
   const request = new Request(url, {
     method: "GET",
