@@ -1,3 +1,5 @@
+import { debounceTime } from 'rxjs/operators';
+
 import * as l from "lodash";
 
 import * as sr from "./speechRecognition";
@@ -116,8 +118,15 @@ async function onEvent(event) {
     handler: handlers.globalTimerHandler
   });
 
+  // stm.add("fallback", {
+  //   global: true,
+  //   handler: handlers.fallback,
+  // });
+
   document.addEventListener("kuokko:start", async (event) => {
-    const subscription = sr.create().subscribe(onEvent.bind(stm));
+    sr.create().pipe(
+      debounceTime(100)
+    ).subscribe(onEvent.bind(stm));
     await stm.start(subscription);
     window.stm = stm;
   });

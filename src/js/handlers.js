@@ -13,7 +13,7 @@ export function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
-      synth.speak('Benvenutti! Soy kuokko, busca una receta');
+      await synth.speak('Benvenutti! Soy kuokko, busca una receta');
     }
   }
 }
@@ -34,7 +34,7 @@ export function searchHandler() {
 
     async handle(text) {
       const {matches} = this.state.search;
-      synth.speak(`Ok, un segundo. Buscando recetas de ${matches.rest.join(" ")}`);
+      await synth.speak(`Ok, un segundo. Buscando recetas de ${matches.rest.join(" ")}`);
 
       const term = matches.rest.join(" ");
       const results = await api.search(matches.rest.join(" "));
@@ -46,23 +46,23 @@ export function searchHandler() {
       this.state.searchResultsIndex = 0;
 
       if (this.state.searchResultsFound === 0) {
-        synth.speak("No he encotrado ninguna receta.");
+        await synth.speak("No he encotrado ninguna receta.");
       } else {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
 
         events.emit("recipe", candidate);
         if (this.state.searchResultsFound === 1) {
           // const candidate = this.state.searchResults[this.state.searchResultsExposed];
-          synth.speak(`Tengo una receta de ${term}. `
-                      + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
+          await synth.speak(`Tengo una receta de ${term}. `
+                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
 
         } else {
           if (this.state.searchResultsFound < 6) {
-            synth.speak(`Tengo ${this.state.searchResultsFound} recetas de ${term}. `
-                        + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
+            await synth.speak(`Tengo ${this.state.searchResultsFound} recetas de ${term}. `
+                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
           } else {
-            synth.speak(`Tengo muchas recetas de ${term}. `
-                        + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
+            await synth.speak(`Tengo muchas recetas de ${term}. `
+                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
           }
         }
       }
@@ -86,9 +86,9 @@ export function searchNextResultHandler() {
       this.state.searchResultsIndex++;
       if (this.state.searchResults.length > this.state.searchResultsIndex) {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
-        synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
+        await synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
       } else {
-        synth.speak(`¡No hay mas recetas!`);
+        await synth.speak(`No hay mas recetas!`);
         this.state.searchResultsIndex--;
       }
     }
@@ -125,8 +125,8 @@ export function searchInfoHandler() {
       const time = parseMinutes(recipe.cookTime);
       msg += `El tiempo de elaboración es de ${time} minutos`;
 
-      synth.speak(msg)
-      synth.speak("¿Empezamos?")
+      await synth.speak(msg)
+      await synth.speak("¿Empezamos?")
     }
   };
 }
@@ -147,7 +147,7 @@ export function searchInfoTimeHandler() {
       const time = parseMinutes(recipe.cookTime);
       const msg = (`El tiempo de elaboración es de ${time} minutos` +
                    "¿Quieres saber algo mas?");
-      synth.speak(msg);
+      await synth.speak(msg);
     }
   };
 }
@@ -177,7 +177,7 @@ export function searchInfoDifficultyHandler() {
 
       msg += "¿Quieres saber algo mas?";
 
-      synth.speak(msg)
+      await synth.speak(msg)
     }
   };
 }
@@ -196,9 +196,9 @@ export function searchInfoGuestsHandler() {
     async handle(text) {
       const recipe = this.state.recipe;
       if (recipe.servings === 1) {
-        synth.speak(`Es una receta para 1 persona.`);
+        await synth.speak(`Es una receta para 1 persona.`);
       } else {
-        synth.speak(`Es una receta para ${recipe.servings} personas.`);
+        await synth.speak(`Es una receta para ${recipe.servings} personas.`);
       }
     }
   };
@@ -214,7 +214,7 @@ export function searchInfoNoMoreHandler() {
     },
 
     async handle(text) {
-      synth.speak("Genial, ¿Empezamos?");
+      await synth.speak("Genial, ¿Empezamos?");
     }
   };
 }
@@ -232,7 +232,7 @@ export function startHandler() {
     },
 
     async handle(text) {
-      synth.speak("Perfecto, Primero vamos a preparar los ingredientes, ¿Preparado?");
+      await synth.speak("Perfecto, Primero vamos a preparar los ingredientes, ¿Preparado?");
     }
   };
 }
@@ -249,7 +249,7 @@ export function recipeIngredientsHandler() {
 
     async handle(text) {
       const recipe = this.state.recipe;
-      synth.speak("Ok, los ingredientes son:");
+      await synth.speak("Ok, los ingredientes son:");
 
       for (let item of recipe.ingredients) {
         const result = [];
@@ -261,10 +261,10 @@ export function recipeIngredientsHandler() {
 
         if (item.preparation) result.push(item.preparation);
 
-        synth.speak(`${result.join(" ")},`);
+        await synth.speak(`${result.join(" ")},`);
       }
 
-      synth.speak("¿Los tienes preparados?");
+      await synth.speak("¿Los tienes preparados?");
     }
   };
 }
@@ -289,7 +289,7 @@ export function recipeIngredientsReadyHandler() {
       this.state.recipeStepsNumber = this.state.recipeSteps.length;
       this.state.recipeCurrentStep = -1;
 
-      synth.speak("Pues empecemos:");
+      await synth.speak("Pues empecemos:");
       this.transitionTo("recipe/preparation/nextstep");
     }
   };
@@ -315,30 +315,32 @@ export function recipePreparationNextStep() {
 
       if (current < steps.length) {
         const step = steps[current];
+        console.log(step);
+
         if (step.action === "add") {
-          synth.speak(`Añada ${step.ingredient.name}.`);
+          await synth.speak(`Añada ${step.ingredient.name}.`);
           if (step.note) {
-            synth.speak(step.note);
+            await synth.speak(step.note);
           }
         } else if (step.action === "wait") {
-          synth.speak(`Espere ${step.time}.`);
+          await synth.speak(`Espere ${step.time}.`);
           if (step.note) {
-            synth.speak(step.note);
+            await synth.speak(step.note);
           }
         } else if (step.action === "technique") {
-          synth.speak(`${step.technique.name}.`)
+          await synth.speak(`${step.technique.name}.`)
           if (step.note) {
-            synth.speak(step.note);
+            await synth.speak(step.note);
           }
         } else if (step.action === "other") {
-          synth.speak(step.description);
+          await synth.speak(step.description);
         } else {
-          synth.speak("¡Esta receta es una mierda y no esta completa!");
+          await synth.speak("Esta receta es una mierda y no esta completa!");
         }
       }
 
       if (current === steps.length-1) {
-        synth.speak(`Y ya esta, ya tienes tu ${recipe.title}.`);
+        await synth.speak(`Y ya esta, ya tienes tu ${recipe.title}.`);
         this.stop();
       }
     }
@@ -360,7 +362,7 @@ export function recipePreparationRepeatStep() {
 
     async handle(text) {
       this.state.recipeCurrentStep--;
-      synth.speak("Claro!");
+      await synth.speak("Claro!");
       this.transitionTo("recipe/preparation/nextstep");
     }
   };
@@ -390,10 +392,10 @@ export function globalTimerHandler() {
           matches[0] === "un" &&
           matches[1] === "minuto") {
 
-        synth.speak("Ok, timer iniciado.");
+        await synth.speak("Ok, timer iniciado.");
 
-        this.state.timer.cursor = setTimeout(() => {
-          synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
+        this.state.timer.cursor = setTimeout(async () => {
+          await synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
         }, 60*1000);
       } else if (matches.length >= 2 &&
                  numRe.test(matches[0]) &&
@@ -406,10 +408,10 @@ export function globalTimerHandler() {
           time = parseInt(matches[0], 10);
         }
 
-        synth.speak("Ok, timer iniciado.");
+        await synth.speak("Ok, timer iniciado.");
 
-        this.state.timer.cursor = setTimeout(() => {
-          synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
+        this.state.timer.cursor = setTimeout(async () => {
+          await synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
         }, time*1000);
       }
 
@@ -432,7 +434,7 @@ export function doYouHearMeHandler() {
     },
 
     async handle(text) {
-      synth.speak("No, paso de tí");
+      await synth.speak("No, paso de tí");
     }
   };
 }
@@ -454,7 +456,7 @@ export function howAreYouHandler(){
     },
 
     async handle(text) {
-      synth.speak(responses[Math.floor(Math.random() * responses.length)]);
+      await synth.speak(responses[Math.floor(Math.random() * responses.length)]);
     }
   };
 }
