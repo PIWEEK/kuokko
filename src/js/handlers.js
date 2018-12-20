@@ -432,7 +432,8 @@ export function globalTimerHandler() {
 export function terminateHandler() {
   const tokens = [
     ["cuoco", "para"],
-    ["coco", "para"]
+    ["coco", "para"],
+    ["coco", "termin"]
   ];
 
   return {
