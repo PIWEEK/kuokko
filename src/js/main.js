@@ -110,6 +110,9 @@ async function onEvent(event) {
     handler: handlers.fallback,
   });
 
-  await stm.start();
-  sr.create().subscribe(onEvent.bind(stm));
+  document.querySelector("body").addEventListener('click', async (event) => {
+    await stm.start();
+    sr.create().subscribe(onEvent.bind(stm));
+  });
+
 })();

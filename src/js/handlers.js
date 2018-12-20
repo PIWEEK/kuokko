@@ -13,7 +13,7 @@ export function initialHandler() {
     onEnter() {},
     onLeave() {},
     async handle() {
-      // synth.speak('Benvenutti! Soy kuokko, busca una receta');
+      synth.speak('Benvenutti! Soy kuokko, busca una receta');
     }
   }
 }
