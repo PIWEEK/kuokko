@@ -38,9 +38,9 @@ export class KuoRecipeDetail {
   }
 
   private renderImage() {
-    return this.isMain
-    ? 'https://loremflickr.com/480/200/food/all'
-    : 'https://loremflickr.com/480/200/delicious/all';
+    return this.recipe.photoUrl || this.isMain
+          ? 'https://loremflickr.com/480/200/food/all'
+          : 'https://loremflickr.com/480/200/delicious/all';
   }
 
   private renderDifficulty(difficulty) {
