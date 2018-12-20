@@ -37,21 +37,38 @@ export class KuoRecipeDetail {
     return null;
   }
 
+  private renderImage() {
+    return this.isMain
+    ? 'https://loremflickr.com/480/200/food/all'
+    : 'https://loremflickr.com/480/200/delicious/all';
+  }
+
+  private renderDifficulty(difficulty) {
+    switch(difficulty) {
+      case 'easy':
+        return 'fácil';
+      case 'hard':
+        return 'difícil';
+      default:
+        return 'moderado';
+    }
+  }
+
   render() {
     return (
-      <article class={`recipe ${this.isMain ? 'is-main' : null}`}>
+      <article class={`recipe ${this.isMain ? 'is-main' : ''}`}>
         <div class="recipe-main">
-          <img class="recipe-pic" src="https://loremflickr.com/480/200/food/all" alt=""/>
+          <img class="recipe-pic" src={this.renderImage()} alt=""/>
           <p class="recipe-author">{this.recipe.author} </p>
           <h1 class="recipe-title">{this.recipe.title}</h1>
-          <div class="recipe-data">
-            <span>
+          <div class="recipe-summary">
+            <span class="time">
               {this.recipe.cookTime}
             </span>
-            <span>
-              {this.recipe.difficulty}
+            <span class="difficulty">
+              {this.renderDifficulty(this.recipe.difficulty)}
             </span>
-            <span>
+            <span class="servings">
               {this.recipe.servings}
             </span>
           </div>

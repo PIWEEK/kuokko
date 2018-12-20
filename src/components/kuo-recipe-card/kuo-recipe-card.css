@@ -32,6 +32,41 @@
   padding-bottom: 1rem;
 }
 
+.recipe-summary {
+  display: flex;
+  color: var(--gray);
+}
+
+.recipe-summary > * {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.recipe-summary > *::before {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: '';
+  display: inline-block;
+  height: 1.2rem;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+  width: 1.2rem;
+}
+
+.recipe-summary .time::before {
+  background-image: url('/src/images/icon-clock.svg');
+}
+
+.recipe-summary .difficulty::before {
+  background-image: url('/src/images/icon-difficulty.svg');
+}
+
+.recipe-summary .servings::before {
+  background-image: url('/src/images/icon-servings.svg');
+}
+
 @media (min-width: 1024px) {
   .recipe-aside {
     margin-left: 2rem;

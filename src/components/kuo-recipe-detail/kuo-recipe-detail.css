@@ -52,42 +52,6 @@
     grid-column: 1 / 4;
 }
 
-.recipe-summary {
-    display: flex;
-}
-
-.recipe-summary > * {
-    align-items: center;
-    display: flex;
-    padding: 0.5rem 0;
-    padding-right: 1rem;
-    color: #7A8395;
-    font-size: 0.8rem;
-}
-
-.recipe-summary > *::before {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    content: '';
-    display: block;
-    height: 1.2rem;
-    margin-right: 0.4rem;
-    width: 1.2rem;
-}
-
-.recipe-summary .time::before {
-    background-image: url('/src/images/icon-clock.svg');
-}
-
-.recipe-summary .difficulty::before {
-    background-image: url('/src/images/icon-difficulty.svg');
-}
-
-.recipe-summary .servings::before {
-    background-image: url('/src/images/icon-servings.svg');
-}
-
 .recipe-steps-list {
     color: #7A8395;
     font-size: 1.125rem;
