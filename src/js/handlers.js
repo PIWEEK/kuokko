@@ -56,7 +56,6 @@ export function searchHandler() {
       } else {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
 
-        events.emit("recipe", candidate);
         if (this.state.searchResultsFound === 1) {
           // const candidate = this.state.searchResults[this.state.searchResultsExposed];
           await synth.speak(`Tengo una receta de ${term}. `
@@ -238,6 +237,7 @@ export function startHandler() {
     },
 
     async handle(text) {
+      events.emit("recipe", this.state.recipe);
       await synth.speak("Perfecto, Primero vamos a preparar los ingredientes, ¿Preparado?");
     }
   };
