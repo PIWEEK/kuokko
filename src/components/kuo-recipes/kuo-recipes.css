@@ -31,11 +31,14 @@
   .recipes-layout {
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns: repeat(3, 30%);
+    justify-items: center;
+    justify-content: start;
+    align-content: start;
+    grid-template-columns: repeat(3, 33%);
   }
 
   .recipe-first {
-    grid-column: 1 / 5;
+    grid-column: 1 / 4;
     display: flex;
     padding-bottom: 1rem;
   }

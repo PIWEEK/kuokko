@@ -10,8 +10,44 @@ export class KuoMain {
 
   @State() recipes: any[] = [];
   @State() speech: string = '';
+
+  searchRecipes() {
+    const baseUrl = "http://quotes.kaleidos.net:3333"
+
+    function makeSearch() {
+      const url = `${baseUrl}/recipes`;
+    
+      const request = new Request(url, {
+        method: "GET",
+        mode: "cors"
+      });
+    
+      return fetch(request).then((response) => {
+        return response.json();
+      });
+    }
+    
+    function getRecipe(id) {
+      const url = `${baseUrl}/recipes/${id}`;
+    
+      const request = new Request(url, {
+        method: "GET",
+        mode: "cors"
+      });
+    
+      return fetch(request).then((response) => {
+        return response.json();
+      });
+    }
+
+    return makeSearch().then((results) => {
+      return Promise.all(results.map(({id}) => getRecipe(id)));
+    });
+  }
   
-  componentWillLoad() {
+  async componentWillLoad() {
+    this.recipes = await this.searchRecipes();
+
     document.addEventListener('kuokko:search', (event: any) => {
       console.log('kuokko:search', event.detail);
       this.recipes = event.detail;
@@ -28,7 +64,7 @@ export class KuoMain {
     return (
       <main class="container">
         <section class="kuokko-area">
-          <h1 class="title">Benvenutti! Soy Kuokko.</h1>
+          <h1 class="title">Benvenutti!<br /> Soy Kuokko.</h1>
           <p class="tagline">¿Qué te apetece cocinar?</p>
           <kuo-avatar speech={this.speech}></kuo-avatar>
           <div class="feedback">
