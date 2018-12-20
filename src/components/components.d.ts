@@ -19,9 +19,7 @@ export namespace Components {
     'speech'?: string;
   }
 
-  interface KuoMain {
-    'renderRecipes': (recipes: any) => any;
-  }
+  interface KuoMain {}
   interface KuoMainAttributes extends StencilHTMLAttributes {}
 
   interface KuoRecipes {

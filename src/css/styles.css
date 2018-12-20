@@ -11,8 +11,10 @@
   --small: 0.9rem;
 
   --bold: 800;
-  --medium: 400;
+  --normal: 400;
   --light: 200;
+
+  --breakpoint: 1024px;
 }
 
 * {

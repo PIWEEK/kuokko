@@ -22,10 +22,10 @@
   font-size: var(--small);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .container {
     display: flex;
-    max-width: 1200px;
+    max-width: var(--breakpoint);
     width: 100vw;
     margin: 3rem auto 0;
     min-height: 100vh;
