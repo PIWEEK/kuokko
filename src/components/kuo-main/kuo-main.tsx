@@ -46,7 +46,7 @@ export class KuoMain {
   }
   
   async componentWillLoad() {
-    this.recipes = await this.searchRecipes();
+    const recipes = this.recipes = await this.searchRecipes();
 
     document.addEventListener('kuokko:search', (event: any) => {
       console.log('kuokko:search', event.detail);
@@ -56,6 +56,11 @@ export class KuoMain {
     document.addEventListener('kuokko:speech', (event: any) => {
       console.log('kuokko:speech', event.detail);
       this.speech = event.detail;
+    });
+
+    document.addEventListener('kuokko:terminate', () => {
+      console.log('kuokko:terminate');
+      this.recipes = recipes;
     });
 
   }

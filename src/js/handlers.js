@@ -446,6 +446,7 @@ export function terminateHandler() {
 
     async handle(text) {
       await synth.speak("Gracias por usar Kuokko.")
+      events.emit('terminate');
       this.stop();
     }
   };

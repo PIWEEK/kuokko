@@ -33,7 +33,7 @@ export class KuoRecipes {
       return (
         <article class="recipe recipe-first">
           <div class="recipe-main">
-            <img class="recipe-pic" src="https://loremflickr.com/480/200/food/all" alt=""/>
+            <img class="recipe-pic" src="https://loremflickr.com/480/200/delicious" alt=""/>
             <p class="recipe-author">{recipe.author} </p>
             <h1 class="recipe-title">{recipe.title}</h1>
             <div class="recipe-data">
@@ -56,7 +56,7 @@ export class KuoRecipes {
     } else {
       return (
         <article class="recipe recipe-secondary">
-          <img class="recipe-pic" src="https://loremflickr.com/480/200/food/all" alt=""/>
+          <img class="recipe-pic" src="https://loremflickr.com/480/200/savoury" alt=""/>
           <p class="recipe-author">{recipe.author}</p>
           <h2 class="recipe-title">{recipe.title}</h2>
           <div class="recipe-data">
