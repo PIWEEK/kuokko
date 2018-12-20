@@ -363,6 +363,32 @@ export function recipePreparationNextStep() {
     ["siguiente"],
   ];
 
+  function stepToString(step) {
+    let result = [];
+
+    if (step.action === "add") {
+      if (step.ingredient.quantity) {
+        result.push(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}.`);
+      } else {
+        result.push(`Añada ${step.ingredient.name}.`);
+      }
+    } else if (step.action === "wait") {
+      result.push(`Espere ${step.time}.`);
+    } else if (step.action === "technique") {
+      result.push(`${step.technique.name}.`)
+    } else if (step.action === "other") {
+      result.push(step.description);
+    } else {
+      result.push("Esta receta es una mierda y no esta completa!");
+    }
+
+    if (step.note) {
+      result.push(step.note);
+    }
+
+    return result;
+  }
+
   return {
     async match(input) {
       return !!matchTokensList(tokens, input);
@@ -381,36 +407,7 @@ export function recipePreparationNextStep() {
         const step = steps[current];
 
         events.emit("recipe:step", step);
-
-        if (step.action === "add") {
-          if (step.ingredient.quantity) {
-            await synth.speak(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}.`);
-          } else {
-            await synth.speak(`Añada ${step.ingredient.name}.`);
-          }
-          if (step.note) {
-            await synth.speak(step.note);
-          }
-        } else if (step.action === "wait") {
-          await synth.speak(`Espere ${step.time}.`);
-          if (step.note) {
-            await synth.speak(step.note);
-          }
-        } else if (step.action === "technique") {
-          await synth.speak(`${step.technique.name}.`)
-          if (step.note) {
-            await synth.speak(step.note);
-          }
-        } else if (step.action === "other") {
-          await synth.speak(step.description);
-        } else {
-          await synth.speak("Esta receta es una mierda y no esta completa!");
-        }
-
-
-        if (current === 0) {
-          await synth.speak("Avisame cuando lo tengas diciendo 'Siguiente Cuoco`.");
-        }
+        stepToString(step).forEach(async (text) => await synth.speak(text));
       }
 
       if (current === steps.length-1) {

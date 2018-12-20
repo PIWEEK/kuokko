@@ -40,6 +40,7 @@
   .is-main {
     grid-column: 1 / 4;
     padding-bottom: 1rem;
+    width: 100%;
   }
 
   .recipe-aside {

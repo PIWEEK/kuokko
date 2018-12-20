@@ -33,9 +33,11 @@ export namespace Components {
 
   interface KuoRecipeDetail {
     'recipe': any;
+    'step': any;
   }
   interface KuoRecipeDetailAttributes extends StencilHTMLAttributes {
     'recipe'?: any;
+    'step'?: any;
   }
 
   interface KuoRecipes {

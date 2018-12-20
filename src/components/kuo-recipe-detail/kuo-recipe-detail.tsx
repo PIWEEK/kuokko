@@ -11,73 +11,52 @@ import {
 export class KuoRecipeDetail {
 
     @Prop() recipe: any;
+    @Prop() step: any;
+
+    stepToString(step) {
+        let result = [];
+
+        if (step.action === "add") {
+            if (step.ingredient.quantity) {
+                result.push(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}.`);
+            } else {
+                result.push(`Añada ${step.ingredient.name}.`);
+            }
+        } else if (step.action === "wait") {
+            result.push(`Espere ${step.time}.`);
+        } else if (step.action === "technique") {
+            result.push(`${step.technique.name}.`)
+        } else if (step.action === "other") {
+            result.push(step.description);
+        } else {
+            result.push("Esta receta es una mierda y no esta completa!");
+        }
+
+        if (step.note) {
+            result.push(step.note);
+        }
+
+        return result;
+    }
+
+    humanReadableInstructions() {
+        const instructions = this.recipe.method.reduce((acc, v) => acc.concat(v.steps), []);
+        return instructions.map((step) => ({ text: this.stepToString(step).join('. '), current: step === this.step }));
+    }
 
     render() {
         console.log('kuo-recipe-detail', this.recipe);
         return (
             <div class="recipes-layout">
-                <article class="recipe">
-                    <div class="recipe-main">
-                        <img class="recipe-pic" src="https://loremflickr.com/480/200/food/all" alt=""/>
-                        <p class="recipe-author">{this.recipe.author} </p>
-                        <h1 class="recipe-title">{this.recipe.title}</h1>
-                        <div class="recipe-data">
-                            <span>
-                                {this.recipe.cookTime}
-                            </span>
-                            <span>
-                                {this.recipe.difficulty}
-                            </span>
-                            <span>
-                                {this.recipe.servings}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="recipe-aside">
-                        <ul class="recipe-ingredients">
-                            { this.recipe.ingredients.map((ingredient) => {
-                                  return (
-                                      <li>
-                                          {ingredient.quantity ? `${ingredient.quantity} de ` : ''}
-                                          {ingredient.name}
-                                      </li>
-                                  )}
-                            )}
-                        </ul>
-                    </div>
-                </article>
-
+                <kuo-recipe-card recipe={this.recipe} is-main={true}></kuo-recipe-card>
                 <section class="recipe-information">
-                    <h2 class="recipe-title">Ensalada de pasta con atún y tomate</h2>
-                    <div class="recipe-summary">
-                        <div class="time">30 minutos</div>
-                        <div class="difficulty">Fácil</div>
-                        <div class="servings">3 personas</div>
-                    </div>
                     <div class="recipe-steps">
                         <ul class="recipe-steps-list">
-                            <li>Cocer la pasta</li>
-                            <li>Escurrir</li>
-                            <li>Echar un chorrito de aceite de oliva (para que se apelmace y seguidamente la dejamos enfriar)</li>
-                            <li class="current-step">Escurrir bien el atún del aceite que traen las latas</li>
-                            <li>Echarlo en una ensaladera</li>
-                            <li>Picar los palitos de cangrejo en rodajas finas</li>
-                            <li>Mezclar en la ensaladera con el atún.</li>
-                            <li>Mezclar con el queso de cabra en taquitos pequeños. </li>
-                            <li>Cortar los tomates cherry a la mitad.</li>
-                            <li>Cortar las aceitunas negras en rodajas</li>
-                            <li>Dejar las aceitunas rellenas enteras</li>
-                            <li>Cocer la pasta</li>
-                            <li>Escurrir</li>
-                            <li>Echar un chorrito de aceite de oliva (para que se apelmace y seguidamente la dejamos enfriar)</li>
-                            <li>Escurrir bien el atún del aceite que traen las latas</li>
-                            <li>Echarlo en una ensaladera</li>
-                            <li>Picar los palitos de cangrejo en rodajas finas</li>
-                            <li>Mezclar en la ensaladera con el atún.</li>
-                            <li>Mezclar con el queso de cabra en taquitos pequeños. </li>
-                            <li>Cortar los tomates cherry a la mitad.</li>
-                            <li>Cortar las aceitunas negras en rodajas</li>
-                            <li>Dejar las aceitunas rellenas enteras.</li>
+                            {
+                                this.humanReadableInstructions().map(({text, current}) => (
+                                    <li class={ current ? "current-step" : "" }>{ text }</li>
+                                ))
+                            }
                         </ul>
                     </div>
                 </section>

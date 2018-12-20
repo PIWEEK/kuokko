@@ -1,28 +1,4 @@
 
-.recipe-pic {
-  width: 100%;
-}
-
-.recipe-author {
-  text-transform: uppercase;
-  color: var(--gray);
-  font-weight: var(--bold);
-  margin: 0.5rem 0;
-  opacity: 0.8;
-}
-
-.recipe-title {
-  font-weight: var(--normal);
-  padding: 0;
-  margin: 0.5rem 0;
-}
-
-.recipe-ingredients {
-  list-style-type: none;
-  margin: 0;
-  padding: 1rem 0;
-}
-
 @media (min-width: 1024px) {
   .recipes-layout {
     display: grid;
@@ -33,10 +9,10 @@
     grid-template-columns: repeat(3, 33%);
   }
 
-  .recipe {
+  .is-main {
     grid-column: 1 / 4;
-    display: flex;
     padding-bottom: 1rem;
+    width: 100%
   }
 
   .recipe-aside {
@@ -44,12 +20,9 @@
   }
 }
 
-
-
-/* ---- */
-
 .recipe-information {
     grid-column: 1 / 4;
+    width: 100%;
 }
 
 .recipe-steps-list {

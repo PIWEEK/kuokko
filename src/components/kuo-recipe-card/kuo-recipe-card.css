@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.is-main img {
+    width: 474px;
+    height: 203px;
+}
+
 .recipe-pic {
   width: 100%;
 }
@@ -21,6 +26,9 @@
 }
 
 .recipe-ingredients {
+  color: #3A3F47;
+  font-size: 14px;
+  line-height: 20px;
   list-style-type: none;
   margin: 0;
   padding: 1rem 0;
