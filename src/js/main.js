@@ -116,13 +116,7 @@ async function onEvent(event) {
     handler: handlers.globalTimerHandler
   });
 
-  // stm.add("fallback", {
-  //   global: true,
-  //   handler: handlers.fallback,
-  // });
-
   document.addEventListener("kuokko:start", async (event) => {
-    console.log(event);
     const subscription = sr.create().subscribe(onEvent.bind(stm));
     await stm.start(subscription);
     window.stm = stm;
