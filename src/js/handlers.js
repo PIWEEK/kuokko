@@ -54,15 +54,15 @@ export function searchHandler() {
         if (this.state.searchResultsFound === 1) {
           // const candidate = this.state.searchResults[this.state.searchResultsExposed];
           synth.speak(`Tengo una receta de ${term}. `
-                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+                      + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
 
         } else {
           if (this.state.searchResultsFound < 6) {
             synth.speak(`Tengo ${this.state.searchResultsFound} recetas de ${term}. `
-                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+                        + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
           } else {
             synth.speak(`Tengo muchas recetas de ${term}. `
-                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+                        + `Te puede interesar ${candidate.title}. ¿Empezamos?`);
           }
         }
       }
@@ -88,7 +88,7 @@ export function searchNextResultHandler() {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
         synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
       } else {
-        synth.speak(`No hay mas recetas!`);
+        synth.speak(`¡No hay mas recetas!`);
         this.state.searchResultsIndex--;
       }
     }
@@ -123,7 +123,7 @@ export function searchInfoHandler() {
       }
 
       const time = parseMinutes(recipe.cookTime);
-      msg += `El tiempo de elaboracion es de ${time} minutos`;
+      msg += `El tiempo de elaboración es de ${time} minutos`;
 
       synth.speak(msg)
       synth.speak("¿Empezamos?")
@@ -145,7 +145,7 @@ export function searchInfoTimeHandler() {
     async handle(text) {
       const recipe = this.state.recipe;
       const time = parseMinutes(recipe.cookTime);
-      const msg = (`El tiempo de elaboracion es de ${time} minutos` +
+      const msg = (`El tiempo de elaboración es de ${time} minutos` +
                    "¿Quieres saber algo mas?");
       synth.speak(msg);
     }
@@ -232,7 +232,7 @@ export function startHandler() {
     },
 
     async handle(text) {
-      synth.speak("Perfecto, Primero vamos a preparar los ingredientes. ¿Preparado?");
+      synth.speak("Perfecto, Primero vamos a preparar los ingredientes, ¿Preparado?");
     }
   };
 }
@@ -333,7 +333,7 @@ export function recipePreparationNextStep() {
         } else if (step.action === "other") {
           synth.speak(step.description);
         } else {
-          synth.speak("Esta receta es una mierda y no esta completa!");
+          synth.speak("¡Esta receta es una mierda y no esta completa!");
         }
       }
 
@@ -432,7 +432,7 @@ export function doYouHearMeHandler() {
     },
 
     async handle(text) {
-      synth.speak("No, paso de ti");
+      synth.speak("No, paso de tí");
     }
   };
 }
