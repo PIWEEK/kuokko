@@ -43,6 +43,12 @@ async function onEvent(event) {
     handler: handlers.howAreYouHandler
   });
 
+  stm.add("ihaveonequestion", {
+    global: true,
+    hidden: true,
+    handler: handlers.iHaveOneQuestionHandler
+  });
+
   stm.add("search", {
     handler: handlers.searchHandler,
     choices: ["search", "search/**", "start"]

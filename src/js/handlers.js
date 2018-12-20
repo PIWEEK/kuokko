@@ -108,10 +108,10 @@ export function searchInfoHandler() {
 
       let msg = "";
 
-      if (recipe.serving === 1) {
+      if (recipe.servings === 1) {
         msg += `Es una receta para 1 persona, `;
       } else {
-        msg += `Es una receta para ${recipe.serving} personas, `;
+        msg += `Es una receta para ${recipe.servings} personas, `;
       }
 
       if (recipe.dificulty === "easy") {
@@ -195,14 +195,11 @@ export function searchInfoGuestsHandler() {
 
     async handle(text) {
       const recipe = this.state.recipe;
-
-      if (recipe.serving === 1) {
+      if (recipe.servings === 1) {
         synth.speak(`Es una receta para 1 persona.`);
       } else {
-        synth.speak(`Es una receta para ${recipe.serving} personas.`);
+        synth.speak(`Es una receta para ${recipe.servings} personas.`);
       }
-
-      synth.speak("Es una receta para 4 personas.");
     }
   };
 }
@@ -462,6 +459,22 @@ export function howAreYouHandler(){
   };
 }
 
+export function iHaveOneQuestionHandler(){
+  const tokens = [
+    ["tengo", "una", "pregunta"],
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      synth.speak("27 centimetros");
+    }
+  };
+}
+
 export function fallback() {
   const tokens = [
     ["rapido"],
@@ -498,7 +511,6 @@ function tokenize(text) {
 function matchTokens(base, incoming) {
   incoming = tokenize(incoming);
 
-  // debugger
   let maxIndex = -1;
   let found = 0;
 
