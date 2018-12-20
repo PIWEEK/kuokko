@@ -246,6 +246,7 @@ export function startHandler() {
 export function recipeIngredientsHandler() {
   const tokens = [
     ["si"],
+    ["preparad"],
   ];
 
   return {
@@ -278,6 +279,7 @@ export function recipeIngredientsHandler() {
 export function recipeIngredientsReadyHandler() {
   const tokens = [
     ["si"],
+    ["preparad"],
   ];
 
   return {
