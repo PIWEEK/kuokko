@@ -49,12 +49,13 @@
 .kuokko-face .eyeface {
   display: flex;
   justify-content: center;
+  margin-bottom: 0.25rem;
 }
 
 .kuokko-face .eye {
   width: 0.75rem;
   height: 0.75rem;
-  margin: 0.5rem;
+  margin: 0.25rem;
   background: var(--gray800);;
   border-radius: 0 0 50% 50%;
   transform: scaleY(0.1) scaleX(0.8);
@@ -69,7 +70,7 @@
 }
 
 .kuokko-face .moustache {
-  width: 2.5rem;
+  width: 3.5rem;
   margin: 0 auto;
   fill: var(--gray800);
 }
@@ -80,6 +81,7 @@
 .kuokko-face .mouth {
   width: 0.5rem;
   height: 0.5rem;
+  margin: -0.2rem;
   background: var(--gray800);;
   border-radius: 50%;
   transition: all var(--time) var(--ease);
