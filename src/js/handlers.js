@@ -35,21 +35,23 @@ export function searchHandler() {
 
     async onEnter() {
       const search = this.state.search;
-      this.state = {search};
+
+      // Reinitialize the state
+      this.state = {};
+      // this.state.search = search;
+      this.state.searchTerm = search.rest.join(" ")
     },
 
     async handle(text) {
-      const matches = this.state.search;
-      const term = matches.rest.join(" ");
-
+      const term = this.state.searchTerm;
       await synth.speak(`Ok, un segundo. Buscando recetas de ${term}`);
 
       const results = await api.search(term);
-      events.emit("search", results);
-
       this.state.searchResults = results;
       this.state.searchResultsFound = results.length;
       this.state.searchResultsIndex = 0;
+
+      events.emit("search", results);
 
       if (this.state.searchResultsFound === 0) {
         await synth.speak("No he encotrado ninguna receta.");
@@ -57,19 +59,19 @@ export function searchHandler() {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
 
         if (this.state.searchResultsFound === 1) {
-          // const candidate = this.state.searchResults[this.state.searchResultsExposed];
-          await synth.speak(`Tengo una receta de ${term}. `
-                      + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+          await synth.speak(`Tengo una receta de ${term} de ${candidate.author}.`)
 
         } else {
           if (this.state.searchResultsFound < 6) {
             await synth.speak(`Tengo ${this.state.searchResultsFound} recetas de ${term}. `
-                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+                              + `Te puede intereresar ${candidate.title} de ${candidate.author}.`);
           } else {
             await synth.speak(`Tengo muchas recetas de ${term}. `
-                        + `Te puede intereresar ${candidate.title}. ¿Empezamos?`);
+                              + `Te puede intereresar ${candidate.title} de ${candidate.author}.`);
           }
         }
+
+        await synth.speak("¿Empezamos?");
       }
     }
   };
@@ -91,11 +93,60 @@ export function searchNextResultHandler() {
       this.state.searchResultsIndex++;
       if (this.state.searchResults.length > this.state.searchResultsIndex) {
         const candidate = this.state.recipe = this.state.searchResults[this.state.searchResultsIndex];
-        await synth.speak(`La siguiente receta es: ${candidate.title}. ¿Empezamos?`);
+        await synth.speak(`Te puede interesar la ${candidate.title} de ${candidate.author}.`)
+        await synth.speak("¿Empezamos?");
       } else {
-        await synth.speak(`No hay mas recetas!`);
-        this.state.searchResultsIndex--;
+        this.transitionTo("search/next/not-found");
       }
+    }
+  };
+}
+
+export function searchNextResultNotFoundHandler() {
+  return {
+    async match(input) {
+      return true;
+    },
+
+    async handle() {
+      debugger
+      const term = this.state.searchTerm
+
+      await synth.speak(`No tengo mas recetas de ${term}.`)
+      await synth.speak("¿Quieres oir la primera de nuevo?")
+    }
+  };
+}
+
+export function searchNextResultNotFoundGoToFirstHandler() {
+  const tokens = [
+    ["si"]
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      this.state.searchResultsIndex = -1;
+      this.transitionTo("search/next");
+    }
+  };
+}
+
+export function searchNextResultNotFoundTerminateHandler() {
+  const tokens = [
+    ["no"]
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      this.transitionTo("terminate");
     }
   };
 }
@@ -205,6 +256,8 @@ export function searchInfoGuestsHandler() {
       } else {
         await synth.speak(`Es una receta para ${recipe.servings} personas.`);
       }
+
+      await synth.speak("¿Quieres saber mas?");
     }
   };
 }
@@ -297,7 +350,6 @@ export function recipeIngredientsReadyHandler() {
       this.state.recipeStepsNumber = this.state.recipeSteps.length;
       this.state.recipeCurrentStep = -1;
 
-      await synth.speak("Pues empecemos:");
       this.transitionTo("recipe/preparation/nextstep");
     }
   };
@@ -320,6 +372,10 @@ export function recipePreparationNextStep() {
       const recipe  = this.state.recipe;
       const steps   = this.state.recipeSteps;
       const current = ++this.state.recipeCurrentStep;
+
+      if (current === 0) {
+        await synth.speak("Pues empecemos:");
+      }
 
       if (current < steps.length) {
         const step = steps[current];
@@ -350,16 +406,21 @@ export function recipePreparationNextStep() {
         } else {
           await synth.speak("Esta receta es una mierda y no esta completa!");
         }
+
+
+        if (current === 0) {
+          await synth.speak("Avisame cuando lo tengas diciendo 'Siguiente Cuoco`.");
+        }
       }
 
       if (current === steps.length-1) {
+        await sleep(400);
         await synth.speak(`Y ya esta, ya tienes tu ${recipe.title}.`);
         this.stop();
       }
     }
   };
 }
-
 
 export function recipePreparationRepeatStep() {
   const tokens = [
@@ -586,4 +647,10 @@ function matchTokensList(tokensList, incoming) {
   }
 
   return matches;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

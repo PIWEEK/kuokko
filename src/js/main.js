@@ -58,39 +58,55 @@ async function onEvent(event) {
   });
 
   stm.add("search", {
-    global: true,
     handler: handlers.searchHandler,
-    choices: ["search", "search/**", "start"]
+    choices: ["search/next", "search/info", "search/info/*", "start"],
+    global: true
   });
 
   stm.add("search/next", {
     handler: handlers.searchNextResultHandler,
-    choices: ["search", "search/*", "start"]
+    choices: ["search", "search/next", "start"]
+  });
+
+  stm.add("search/next/not-found", {
+    handler: handlers.searchNextResultNotFoundHandler,
+    choices: ["search/next/not-found/go-to-first",
+              "search/next/not-found/terminate"]
+  });
+
+  stm.add("search/next/not-found/go-to-first", {
+    handler: handlers.searchNextResultNotFoundGoToFirstHandler,
+    hidden: true,
+  });
+
+  stm.add("search/next/not-found/terminate", {
+    handler: handlers.searchNextResultNotFoundTerminateHandler,
+    hidden: true,
   });
 
   stm.add("search/info", {
     handler: handlers.searchInfoHandler,
-    choices: ["search", "search/**", "start"]
+    choices: ["search/info/*", "search/next", "start"]
   });
 
   stm.add("search/info/time", {
     handler: handlers.searchInfoTimeHandler,
-    choices:  ["search/info/no-more","search", "search/**", "start"],
+    choices:  ["search/info/*", "search/info"],
   });
 
   stm.add("search/info/guests", {
     handler: handlers.searchInfoGuestsHandler,
-    choices:  ["search/info/no-more", "search", "search/**", "start"]
+    choices:  ["search/info/*", "search/info"]
   });
 
   stm.add("search/info/difficulty", {
     handler: handlers.searchInfoDifficultyHandler,
-    choices: ["search/info/no-more", "search","search/**", "start"]
+    choices:  ["search/info/*", "search/info"]
   });
 
   stm.add("search/info/no-more", {
     handler: handlers.searchInfoNoMoreHandler,
-    choices: ["search", "start", "search/next"]
+    choices: ["start", "search/next"]
   });
 
   stm.add("recipe/ingredients", {
