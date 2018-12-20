@@ -5,7 +5,7 @@ import qs from "querystring";
 
 function composeUrl(suffix, params=null) {
   const _url = url.parse(window.kuokkoConfig.baseUrl);
-  _url.pathname = suffix;
+  _url.pathname += suffix;
 
   if (params) {
     _url.search = qs.stringify(params)
