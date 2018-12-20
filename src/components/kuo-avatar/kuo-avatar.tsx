@@ -23,7 +23,6 @@ export class KuoAvatar {
   }
 
   handleKuokkoStart() {
-    console.log('handleKuokkoStart');
     this.isAwake = true;
     const event = new CustomEvent(`kuokko:start`);
     document.dispatchEvent(event);

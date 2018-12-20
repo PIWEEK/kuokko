@@ -17,7 +17,8 @@ import StateMachine from "./stm";
 async function onEvent(event) {
   const text = l.trim(event[0].transcript);
 
-  console.log(`onEvent => text: '${text}', state: ${this.current.name}, steps: ${this.steps.join("->")}`);
+  console.log(`[listen] Escuchado: "${text}"`);
+  console.log(`[state] ${this.current.name}, steps: ${this.steps.join("->")}`);
 
   const handler = await this.matches(text);
   if (handler) {

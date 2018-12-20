@@ -24,14 +24,13 @@ export class KuoRecipes {
       )
     }
   }
-  
+
   render() {
-    console.log('kuo-recipes', this.recipes);
     if (this.recipes.length) {
       return (
         <div class="recipes-layout">
           {this.recipes.map((recipe, index) =>
-            this.renderRecipes(recipe, index) 
+            this.renderRecipes(recipe, index)
           )}
         </div>
       );

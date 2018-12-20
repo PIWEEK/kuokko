@@ -45,7 +45,6 @@ export class KuoRecipeDetail {
     }
 
     render() {
-        console.log('kuo-recipe-detail', this.recipe);
         return (
             <div class="recipes-layout">
                 <kuo-recipe-card recipe={this.recipe} is-main={true}></kuo-recipe-card>

@@ -14,12 +14,15 @@
 .title {
   font-size: var(--large);
   font-weight: var(--normal);
-  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  color: #3A3F47;
 }
 
 .tagline {
   font-size: var(--small);
-  margin: 0;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: #3A3F47;
 }
 
 .feedback {
