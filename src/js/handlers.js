@@ -20,25 +20,31 @@ export function initialHandler() {
 
 export function searchHandler() {
   const tokens = [
-    ["dam", "recet", "de"],
-    ["busc", "recet", "de"],
-    ["tien", "recet", "de"],
+    ["cuoco", "dam", "recet", "de"],
+    ["coco", "dam", "recet", "de"],
+    ["cuoco", "busc", "recet", "de"],
+    ["coco", "busc", "recet", "de"],
   ];
 
   return {
     async match(input) {
       const matches = matchTokensList(tokens, input);
-      this.state.search = {matches};
+      this.state.search = matches;
       return !!matches;
     },
 
+    async onEnter() {
+      const search = this.state.search;
+      this.state = {search};
+    },
+
     async handle(text) {
-      const {matches} = this.state.search;
-      await synth.speak(`Ok, un segundo. Buscando recetas de ${matches.rest.join(" ")}`);
-
+      const matches = this.state.search;
       const term = matches.rest.join(" ");
-      const results = await api.search(matches.rest.join(" "));
 
+      await synth.speak(`Ok, un segundo. Buscando recetas de ${term}`);
+
+      const results = await api.search(term);
       events.emit("search", results);
 
       this.state.searchResults = results;
@@ -318,7 +324,11 @@ export function recipePreparationNextStep() {
         console.log(step);
 
         if (step.action === "add") {
-          await synth.speak(`Añada ${step.ingredient.name}.`);
+          if (step.ingredient.quantity) {
+            await synth.speak(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}.`);
+          } else {
+            await synth.speak(`Añada ${step.ingredient.name}.`);
+          }
           if (step.note) {
             await synth.speak(step.note);
           }
@@ -379,14 +389,14 @@ export function globalTimerHandler() {
     async match(input) {
       const matches = matchTokensList(tokens, input);
 
-      this.state.timer = {matches};
+      this.state.timer = matches
       return !!matches;
     },
 
     async handle(text) {
       const numRe = /\d+/;
       const unitRe = /(?:minutos|segundos)/;
-      const matches = this.state.timer.matches.rest;
+      const matches = this.state.timer.rest;
 
       if (matches.length >= 2 &&
           matches[0] === "un" &&
@@ -418,6 +428,25 @@ export function globalTimerHandler() {
     }
   };
 }
+
+export function terminateHandler() {
+  const tokens = [
+    ["cuoco", "para"],
+    ["coco", "para"]
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      await synth.speak("Gracias por usar Kuokko.")
+      this.stop();
+    }
+  };
+}
+
 
 // --- Special Handlers
 
@@ -472,7 +501,7 @@ export function iHaveOneQuestionHandler(){
     },
 
     async handle(text) {
-      synth.speak("27 centimetros");
+      await synth.speak("27 centimetros");
     }
   };
 }
