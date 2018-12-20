@@ -1,4 +1,4 @@
-.kuokko-face {
+:host .kuokko-face {
     margin: 4rem auto;
     width: 150px;
     height: 150px;
@@ -9,58 +9,58 @@
     box-shadow:
       0 0 1rem 10px hsl(0, 0%, 80%),
       0 0 0 2rem var(--graylight);
-  }
-  
-  .kuokko-face.speaking {
+}
+
+:host(.speaking) .kuokko-face {
+  box-shadow:
+    0 0 1rem 10px hsl(0, 0%, 80%),
+    0 0 0 2rem var(--graylight);
+  animation: kuokkoShadow 0.5s infinite alternate;
+}
+
+:host(.on-match) .kuokko-face {
+  box-shadow:
+    0 0 1rem 10px hsl(0, 0%, 80%),
+    0 0 0 2rem var(--graylight);
+  animation: kuokkoMatch 0.5s;
+}
+
+.kuokko-logo {
+  width: 100%;
+}
+
+@keyframes kuokkoShadow {
+  from {
     box-shadow:
       0 0 1rem 10px hsl(0, 0%, 80%),
       0 0 0 2rem var(--graylight);
-    animation: kuokkoShadow 0.5s infinite alternate;
   }
+  to {
+    box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 70%),
+      0 0 0 2.75rem var(--graylight);
+  }
+}
 
-  .kuokko-face.on-match {
+@keyframes kuokkoMatch {
+  0 {
     box-shadow:
       0 0 1rem 10px hsl(0, 0%, 80%),
       0 0 0 2rem var(--graylight);
-    animation: kuokkoMatch 0.5s;
   }
-  
-  .kuokko-logo {
-    width: 100%;
+  20% {
+    box-shadow:
+      0 0 1rem 10px #92d4a4,
+      0 0 0 2.2rem #aeebbe;
   }
-  
-  @keyframes kuokkoShadow {
-    from {
-      box-shadow:
-        0 0 1rem 10px hsl(0, 0%, 80%),
-        0 0 0 2rem var(--graylight);
-    }
-    to {
-      box-shadow:
-        0 0 1rem 10px hsl(0, 0%, 70%),
-        0 0 0 2.75rem var(--graylight);
-    }
+  80% {
+    box-shadow:
+      0 0 1rem 10px #92d4a4,
+      0 0 0 2.2rem #aeebbe;
   }
-
-  @keyframes kuokkoMatch {
-    0 {
-      box-shadow:
-        0 0 1rem 10px hsl(0, 0%, 80%),
-        0 0 0 2rem var(--graylight);
-    }
-    20% {
-      box-shadow:
-        0 0 1rem 10px #92d4a4,
-        0 0 0 2.2rem #aeebbe;
-    }
-    80% {
-      box-shadow:
-        0 0 1rem 10px #92d4a4,
-        0 0 0 2.2rem #aeebbe;
-    }
-    100% {
-      box-shadow:
-        0 0 1rem 10px hsl(0, 0%, 70%),
-        0 0 0 2rem var(--graylight);
-    }
+  100% {
+    box-shadow:
+      0 0 1rem 10px hsl(0, 0%, 70%),
+      0 0 0 2rem var(--graylight);
   }
+}

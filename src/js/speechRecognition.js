@@ -1,5 +1,6 @@
 import * as rxop from "rxjs/operators";
 import * as rx from "rxjs";
+import * as events from "./events";
 
 let counter = 0;
 
@@ -61,15 +62,18 @@ function internalCreate() {
     };
 
     recognition.onspeechstart = (event) => {
+      events.emit("speech", 'start');
       // console.log("speechRecognition:onspeechstart", id);
     };
 
     recognition.onspeechend = (event) => {
+      events.emit("speech", "end");
       // console.log("speechRecognition:onspeechend", id);
     };
 
     recognition.onresult = (event) => {
       // console.log("speechRecognition:onresult", id, event);
+      events.emit("speech", "match");
       subscriber.next(event.results[event.resultIndex]);
     };
 

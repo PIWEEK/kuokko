@@ -12,8 +12,12 @@ import '@stencil/core';
 
 export namespace Components {
 
-  interface KuoAvatar {}
-  interface KuoAvatarAttributes extends StencilHTMLAttributes {}
+  interface KuoAvatar {
+    'speech': string;
+  }
+  interface KuoAvatarAttributes extends StencilHTMLAttributes {
+    'speech'?: string;
+  }
 
   interface KuoMain {
     'renderRecipes': (recipes: any) => any;
