@@ -45,7 +45,7 @@ export class KuoAvatar {
     return (
       <div
         class="kuokko-face"
-        onClick={this.handleKuokkoStart}>
+        onClick={this.handleKuokkoStart.bind(this)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102 102">
           <g class={sleepClass}>
             <path fill="#3A3F47" d="M82.398 67.026c-.989 6.78-9.181 3.531-11.653-2.118-1.271-3.532-5.085-12.36-11.723-8.828-.777.423-1.342 1.13-1.837 1.977a5.086 5.086 0 0 0-1.765-1.977c-6.71-3.532-10.453 5.296-11.794 8.828-2.472 5.579-10.594 8.898-11.583 2.118-1.13 11.512 20.128 7.063 25.142-1.06 5.156 8.123 26.343 12.572 25.213 1.06z"/>
