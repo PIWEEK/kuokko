@@ -13,19 +13,12 @@ import StateMachine from "./stm";
 // });
 
 async function onEvent(event) {
-  if (this.steps === undefined) {
-    this.steps = [];
-  }
-
   const text = l.trim(event[0].transcript);
 
   console.log(`onEvent => text: '${text}', state: ${this.current.name}, steps: ${this.steps.join("->")}`);
 
   const handler = await this.matches(text);
-
   if (handler) {
-    console.log("handler found:", handler.name);
-    this.steps.push(handler.name);
     this.transitionToHandler(handler, text);
   }
 }
@@ -97,7 +90,13 @@ async function onEvent(event) {
 
   stm.add("recipe/preparation/nextstep", {
     handler: handlers.recipePreparationNextStep,
-    choices: ["recipe/preparation/nextstep"],
+    choices: ["recipe/preparation/nextstep", "recipe/preparation/repeatstep"],
+  });
+
+  stm.add("recipe/preparation/repeatstep", {
+    // hidden: true,
+    handler: handlers.recipePreparationRepeatStep,
+    choices: [],
   });
 
   stm.add("start", {
@@ -105,14 +104,22 @@ async function onEvent(event) {
     choices: ["recipe/ingredients"]
   });
 
-  stm.add("fallback", {
+  stm.add("timer", {
+    hidden: true,
     global: true,
-    handler: handlers.fallback,
+    handler: handlers.globalTimerHandler
   });
 
-  document.querySelector("body").addEventListener('click', async (event) => {
-    await stm.start();
-    sr.create().subscribe(onEvent.bind(stm));
+  // stm.add("fallback", {
+  //   global: true,
+  //   handler: handlers.fallback,
+  // });
+
+  document.querySelector("body").addEventListener("click", async (event) => {
+    const subscription = sr.create().subscribe(onEvent.bind(stm));
+    await stm.start(subscription);
+    window.stm = stm;
   });
+
 
 })();

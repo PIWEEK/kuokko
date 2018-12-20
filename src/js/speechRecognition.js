@@ -74,7 +74,7 @@ function internalCreate() {
     recognition.start(); // Starts the speech recognition service listening to incoming audio
 
     return function unsubscribe() {
-      // console.log("speechRecognition:unsubscribe", id);
+      console.log("speechRecognition:unsubscribe", id);
       recognition.stop();
       // recognition.abort();
     };

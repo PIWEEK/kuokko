@@ -106,7 +106,13 @@ export function searchInfoHandler() {
     async handle(text) {
       const recipe = this.state.recipe;
 
-      let msg = `Es una receta de 4 personas, `;
+      let msg = "";
+
+      if (recipe.serving === 1) {
+        msg += `Es una receta para 1 persona, `;
+      } else {
+        msg += `Es una receta para ${recipe.serving} personas, `;
+      }
 
       if (recipe.dificulty === "easy") {
         msg += "de dificultad baja.";
@@ -188,6 +194,14 @@ export function searchInfoGuestsHandler() {
     },
 
     async handle(text) {
+      const recipe = this.state.recipe;
+
+      if (recipe.serving === 1) {
+        synth.speak(`Es una receta para 1 persona.`);
+      } else {
+        synth.speak(`Es una receta para ${recipe.serving} personas.`);
+      }
+
       synth.speak("Es una receta para 4 personas.");
     }
   };
@@ -284,34 +298,12 @@ export function recipeIngredientsReadyHandler() {
   };
 }
 
-export function fallback() {
-  const tokens = [
-    ["rapido"],
-  ];
-  return {
-    async match(input) {
-      return !!matchTokensList(tokens, input);
-    },
-
-    async handle() {
-      const results = await api.search("paella");
-
-      this.state.searchResults = results;
-      this.state.searchResultsFound = results.length;
-      this.state.searchResultsIndex = 0;
-      this.state.recipe = results[0];
-
-      this.transitionTo("recipe/ready");
-    }
-  }
-}
-
-
 export function recipePreparationNextStep() {
   const tokens = [
     ["siguient", "paso"],
     ["siguient", "cuoco"],
     ["siguient", "coco"],
+    ["siguiente"],
   ];
 
   return {
@@ -332,13 +324,12 @@ export function recipePreparationNextStep() {
             synth.speak(step.note);
           }
         } else if (step.action === "wait") {
-          // TODO: handle properly times and notes
           synth.speak(`Espere ${step.time}.`);
           if (step.note) {
             synth.speak(step.note);
           }
         } else if (step.action === "technique") {
-          synth.speak(`${step.techique.name}.`)
+          synth.speak(`${step.technique.name}.`)
           if (step.note) {
             synth.speak(step.note);
           }
@@ -347,13 +338,87 @@ export function recipePreparationNextStep() {
         } else {
           synth.speak("Esta receta es una mierda y no esta completa!");
         }
-      } else {
-        synth.speak("TODO");
+      }
+
+      if (current === steps.length-1) {
+        synth.speak(`Y ya esta, ya tienes tu ${recipe.title}.`);
+        this.stop();
       }
     }
   };
 }
 
+
+export function recipePreparationRepeatStep() {
+  const tokens = [
+    ["pued", "repetir"],
+    ["repit", "paso"],
+    ["repit"],
+  ];
+
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle(text) {
+      this.state.recipeCurrentStep--;
+      synth.speak("Claro!");
+      this.transitionTo("recipe/preparation/nextstep");
+    }
+  };
+}
+
+export function globalTimerHandler() {
+  const tokens = [
+    ["temporizador", "a"],
+    ["temporizador", "de"],
+    ["timer", "de"],
+  ];
+
+  return {
+    async match(input) {
+      const matches = matchTokensList(tokens, input);
+
+      this.state.timer = {matches};
+      return !!matches;
+    },
+
+    async handle(text) {
+      const numRe = /\d+/;
+      const unitRe = /(?:minutos|segundos)/;
+      const matches = this.state.timer.matches.rest;
+
+      if (matches.length >= 2 &&
+          matches[0] === "un" &&
+          matches[1] === "minuto") {
+
+        synth.speak("Ok, timer iniciado.");
+
+        this.state.timer.cursor = setTimeout(() => {
+          synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
+        }, 60*1000);
+      } else if (matches.length >= 2 &&
+                 numRe.test(matches[0]) &&
+                 unitRe.test(matches[1])) {
+        let time = null;
+
+        if (matches[1] === "minutos") {
+          time = parseInt(matches[0], 10) * 60;
+        } else {
+          time = parseInt(matches[0], 10);
+        }
+
+        synth.speak("Ok, timer iniciado.");
+
+        this.state.timer.cursor = setTimeout(() => {
+          synth.speak(`El timer de ${matches.join(" ")} ha terminado.`);
+        }, time*1000);
+      }
+
+    }
+  };
+}
 
 // --- Special Handlers
 
@@ -397,6 +462,28 @@ export function howAreYouHandler(){
   };
 }
 
+export function fallback() {
+  const tokens = [
+    ["rapido"],
+  ];
+  return {
+    async match(input) {
+      return !!matchTokensList(tokens, input);
+    },
+
+    async handle() {
+      const results = await api.search("ensalada");
+
+      this.state.searchResults = results;
+      this.state.searchResultsFound = results.length;
+      this.state.searchResultsIndex = 0;
+      this.state.recipe = results[0];
+
+      this.transitionTo("recipe/ready");
+    }
+  }
+}
+
 // --- Helpers
 
 function parseMinutes(v) {
@@ -405,21 +492,26 @@ function parseMinutes(v) {
 };
 
 function tokenize(text) {
-  return text.split(/[^a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
+  return text.split(/[^0-9a-zA-Zá-úÁ-ÚñÑüÜ]+/).map(slugify);
 }
 
 function matchTokens(base, incoming) {
   incoming = tokenize(incoming);
 
-  let maxIndex = 0;
+  // debugger
+  let maxIndex = -1;
   let found = 0;
 
   for (let token of base) {
     for (let i=0; i<incoming.length; i++) {
+      const matchingToken = token;
+      const incomingItem = incoming[0]
+
       const matches = incoming[i].indexOf(token) !== -1;
-      if (matches && i >= maxIndex) {
+      if (matches && i > maxIndex) {
         found++;
         maxIndex = i;
+        break;
       }
     }
   }

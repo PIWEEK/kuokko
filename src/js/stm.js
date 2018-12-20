@@ -3,21 +3,29 @@ import match from "minimatch";
 
 export default class StateMachine {
   constructor() {
+    this.steps = [];
     this.reg = {};
     this.state = {};
   }
 
-  async start() {
+  async start(subscription) {
     if (isUndefined(this.current)) {
       throw new Error("initial handler is not defined");
     }
 
     await this.current.onEnter();
     await this.current.handle()
+    this.subscription = subscription;
+  }
+
+  async stop() {
+    this.subscription.unsubscribe();
+    this.state = {};
+    this.steps = [];
+    delete this.subscription;
   }
 
   async matches(data) {
-    console.log("matches:", this.handlers.map(o => o.name));
     for (let handler of this.handlers) {
       const matches = await handler.match(data);
       if (matches) {
@@ -28,13 +36,16 @@ export default class StateMachine {
     return null;
   }
 
-  async transitionTo(name) {
-    const handler = this.reg[name];
-    return this.transitionToHandler(handler);
+  transitionTo(name) {
+    setTimeout(() => {
+      const handler = this.reg[name];
+      return this.transitionToHandler(handler);
+    }, 100);
   }
 
   async transitionToHandler(handler, data) {
-    // TODO: check handler type
+    this.steps.push(handler.name);
+
     if (handler.hidden) {
       await handler.handle(data);
     } else {
@@ -47,17 +58,6 @@ export default class StateMachine {
         this.current = handler;
       }
     }
-  }
-
-  compile(spec) {
-    const result = {};
-
-    for (let key of Object.keys(spec)) {
-      result[key] = spec[key].map(match.makeRe);
-
-    }
-
-    return result;
   }
 
   add(name, {handler, choices, global=false, hidden=false}) {
