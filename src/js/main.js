@@ -124,9 +124,7 @@ async function onEvent(event) {
   // });
 
   document.addEventListener("kuokko:start", async (event) => {
-    sr.create().pipe(
-      debounceTime(100)
-    ).subscribe(onEvent.bind(stm));
+    const subscription = sr.create().pipe(debounceTime(100)).subscribe(onEvent.bind(stm));
     await stm.start(subscription);
     window.stm = stm;
   });
