@@ -7,7 +7,7 @@ import { Component, State } from '@stencil/core';
 })
 
 export class KuoMain {
-    @State() state?: 'list' | 'detail';
+    @State() state?: 'list' | 'detail' = 'list';
     @State() recipes: any[] = [];
     @State() speech: string = '';
 

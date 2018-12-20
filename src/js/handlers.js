@@ -586,6 +586,8 @@ export function fallback() {
       this.state.searchResultsIndex = 0;
       this.state.recipe = results[0];
 
+      events.emit("recipe", results[0]);
+
       this.transitionTo("recipe/ready");
     }
   }
