@@ -323,7 +323,8 @@ export function recipePreparationNextStep() {
 
       if (current < steps.length) {
         const step = steps[current];
-        console.log(step);
+
+        events.emit("recipe:step", step);
 
         if (step.action === "add") {
           if (step.ingredient.quantity) {
