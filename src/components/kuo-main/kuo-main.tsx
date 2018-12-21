@@ -20,7 +20,7 @@ export class KuoMain {
         const baseUrl = (window as any).kuokkoConfig.baseUrl;
 
         function makeSearch() {
-            const url = `${baseUrl}/recipes`;
+            const url = `${baseUrl}recipes`;
 
             const request = new Request(url, {
                 method: "GET",
@@ -33,7 +33,7 @@ export class KuoMain {
         }
 
         function getRecipe(id) {
-            const url = `${baseUrl}/recipes/${id}`;
+            const url = `${baseUrl}recipes/${id}`;
 
             const request = new Request(url, {
                 method: "GET",
