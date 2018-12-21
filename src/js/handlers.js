@@ -38,12 +38,11 @@ export function searchHandler() {
 
       // Reinitialize the state
       this.state = {};
-      // this.state.search = search;
-      this.state.searchTerm = search.rest.join(" ")
+      this.state.search = search;
     },
 
     async handle(text) {
-      const term = this.state.searchTerm;
+      const term = this.state.searchTerm = this.state.search.rest.join(" ")
       await synth.speak(`Ok, un segundo. Buscando recetas de ${term}`);
 
       const results = await api.search(term);
