@@ -11,6 +11,7 @@ export class KuoMain {
     @State() state?: 'list' | 'detail' = 'list';
     @State() recipes: any[] = [];
     @State() speech: string = '';
+    @State() status: string = 'Haz click para empezar';
 
     @State() detail: any;
     @State() step: number;
@@ -102,9 +103,6 @@ export class KuoMain {
                     <h1 class="title">Benvenutti! Soy Kuokko.</h1>
                     <p class="tagline">¿Qué te apetece cocinar?</p>
                     <kuo-avatar speech={this.speech}></kuo-avatar>
-                    <div class="feedback">
-                        Escuchando...
-                    </div>
                   </div>
                 </section>
                 <section class="kuokko-interactive">

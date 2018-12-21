@@ -87,6 +87,12 @@
   transition: all var(--time) var(--ease);
 }
 
+.feedback {
+  color: var(--gray);
+  font-size: var(--small);
+}
+
+
 @keyframes kuokkoShadow {
   from {
     box-shadow:
