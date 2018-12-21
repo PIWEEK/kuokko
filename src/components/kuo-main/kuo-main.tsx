@@ -27,9 +27,9 @@ export class KuoMain {
                 mode: "cors"
             });
 
-            return fetch(request).then((response) => {
-                return response.json();
-            });
+            return fetch(request)
+              .then((response) => response.json())
+              .then((list) => list.filter((r) => !r.title.includes("Victoria")));
         }
 
         function getRecipe(id) {
