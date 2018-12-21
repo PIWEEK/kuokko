@@ -51,7 +51,9 @@ export class KuoMain {
     }
 
     async componentWillLoad() {
-        const recipes = this.recipes = await this.searchRecipes();
+        const recipes = await this.searchRecipes();
+        const shuffleRecipes = (recipes) => recipes.sort(() => Math.random() - 0.5);
+        this.recipes = shuffleRecipes(recipes);
 
         document.addEventListener('kuokko:search', (event: any) => {
             console.log('kuokko:search', event.detail);
@@ -66,7 +68,7 @@ export class KuoMain {
 
         document.addEventListener('kuokko:terminate', () => {
             console.log('kuokko:terminate');
-            this.recipes = recipes;
+            this.recipes = shuffleRecipes(recipes);
         });
 
         document.addEventListener('kuokko:recipe', (event: any) => {
