@@ -108,7 +108,6 @@ export function searchNextResultNotFoundHandler() {
     },
 
     async handle() {
-      debugger
       const term = this.state.searchTerm
 
       await synth.speak(`No tengo mas recetas de ${term}.`)
