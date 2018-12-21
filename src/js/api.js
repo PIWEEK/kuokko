@@ -15,7 +15,7 @@ function composeUrl(suffix, params=null) {
 }
 
 function makeSearch(title) {
-  const url = composeUrl("/recipes", {title});
+  const url = composeUrl("recipes", {title});
 
   const request = new Request(url, {
     method: "GET",
@@ -28,7 +28,7 @@ function makeSearch(title) {
 }
 
 function getRecipe(id) {
-  const url = composeUrl(`/recipes/${id}`);
+  const url = composeUrl(`recipes/${id}`);
 
   const request = new Request(url, {
     method: "GET",

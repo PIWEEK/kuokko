@@ -365,7 +365,9 @@ export function recipePreparationNextStep() {
     let result = [];
 
     if (step.action === "add") {
-      if (step.ingredient.quantity) {
+      if (step.ingredient.preparation) {
+        result.push(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}, ${step.ingredient.preparation}`);
+      } else if (step.ingredient.quantity) {
         result.push(`Añada ${step.ingredient.quantity} de ${step.ingredient.name}.`);
       } else {
         result.push(`Añada ${step.ingredient.name}.`);
@@ -577,7 +579,7 @@ export function fallback() {
     },
 
     async handle() {
-      const results = await api.search("ensalada");
+      const results = await api.search("piweek");
 
       this.state.searchResults = results;
       this.state.searchResultsFound = results.length;

@@ -4,7 +4,7 @@
     display: flex;
     background: var(--white);
   }
-  
+
   .is-main img {
       width: 474px;
       height: 203px;
@@ -77,15 +77,15 @@
 }
 
 .recipe-summary .time::before {
-  background-image: url('/src/images/icon-clock.svg');
+  background-image: url('src/images/icon-clock.svg');
 }
 
 .recipe-summary .difficulty::before {
-  background-image: url('/src/images/icon-difficulty.svg');
+  background-image: url('src/images/icon-difficulty.svg');
 }
 
 .recipe-summary .servings::before {
-  background-image: url('/src/images/icon-servings.svg');
+  background-image: url('src/images/icon-servings.svg');
 }
 
 @media (min-width: 1024px) {
