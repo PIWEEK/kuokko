@@ -13,6 +13,10 @@
   .recipe {
     margin-bottom: 0;
   }
+
+  .recipe-main {
+    flex: 1;
+  }
 }
 
 .recipe {
@@ -29,7 +33,9 @@
 
 .recipe-pic {
     width: 100%;
-    height: 10rem;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
 }
 
 .recipe-author {
@@ -89,13 +95,6 @@
   outline: 1px solid #dbdee1;
   border-radius: 6px;
 }
-
-.main-recipe {
-  grid-column: 1 / 4;
-  display: flex;
-  padding-bottom: 1rem;
-}
-
 
 .recipe-summary {
   display: flex;
